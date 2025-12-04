@@ -1,0 +1,29 @@
+.alert-dismissible {
+    .btn-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+@each $color, $value in $theme-colors {
+    .alert-#{$color} {
+      background-color: rgba(($value), 0.10) !important;
+      border-color: ($value) !important;
+      color: ($value) !important;
+      &.alert-link {
+          font-weight: 700;
+      }
+    }
+  }
+  .alert {
+    position: relative;
+    border: 0;
+    &:last-child {
+        margin: 0;
+    }
+  }

@@ -1,0 +1,27 @@
+.progress-bar {
+    background-color: $primary;
+    box-shadow: none;
+}
+
+.progress {
+    box-shadow: none;
+    height: 16px;
+    overflow: hidden;
+    background-color: var(--#{$variable-prefix}body-bg);
+}
+
+.progress-bar-success {
+    background-color: $success;
+}
+
+.progress-bar-info {
+    background-color: $info;
+}
+
+.progress-bar-warning {
+    background-color: $warning;
+}
+
+.progress-bar-danger {
+    background-color: $danger;
+}

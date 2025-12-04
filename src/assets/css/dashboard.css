@@ -1,0 +1,23 @@
+.widget-desk {
+  overflow: hidden;
+  position: relative;
+}
+
+.widget-desk:hover .widget-icon i {
+  transform: scale(1.1);
+}
+
+.widget-desk .widget-icon i {
+  position: absolute;
+  top: -24px;
+  font-size: 34px;
+  height: 80px;
+  background: rgba(58, 128, 229, 0.12);
+  color: #3a80e5;
+  border-radius: 50%;
+  left: -8px;
+  transition: all 0.5s ease 0s;
+  width: 80px;
+  line-height: 95px;
+  text-align: center;
+}/*# sourceMappingURL=dashboard.css.map */

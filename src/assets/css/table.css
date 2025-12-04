@@ -1,0 +1,59 @@
+.table > tbody > tr > td,
+.table > tbody > tr > th,
+.table > tfoot > tr > td,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > thead > tr > th {
+  border-color: #E6E8EB;
+  padding: 12px 8px;
+}
+
+.table > thead > tr > th, td,
+.table > tbody > tr > th {
+  background-color: transparent !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  background-color: var(--header-bg) !important;
+}
+
+/*--- Data table---*/
+.dt-buttons a.btn {
+  background: #5b6be8;
+  margin-right: 10px;
+  border-radius: 5px !important;
+  border: 1px solid #5b6be8;
+}
+
+.dt-buttons {
+  float: left;
+}
+
+table.dataTable tbody > tr.selected,
+table.dataTable tbody > tr > .selected {
+  background-color: #5b6be8;
+}
+
+/*--- Responsive Table---*/
+table.focus-on tbody tr.focused th,
+table.focus-on tfoot tr.focused th,
+table.focus-on tbody tr.focused td,
+table.focus-on tfoot tr.focused td {
+  background-color: #5b6be8;
+  color: #fff;
+}
+
+.table-rep-plugin .btn-toolbar {
+  display: block;
+}
+
+.table-rep-plugin .btn-default {
+  background-color: white;
+  border-color: #dddddd;
+  margin-right: 5px;
+}
+
+.table-rep-plugin .btn-default.btn {
+  background-color: #5b6be8 !important;
+  border-color: #5b6be8;
+}/*# sourceMappingURL=table.css.map */

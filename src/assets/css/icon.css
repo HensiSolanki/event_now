@@ -1,0 +1,24 @@
+.icon-demo-content {
+  text-align: center;
+  color: #777;
+}
+.icon-demo-content i {
+  display: block;
+  font-size: 26px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  width: 50px;
+  color: #777;
+  height: 50px;
+  line-height: 50px;
+  transition: all 0.5s;
+}
+.icon-demo-content .col-sm-6 {
+  margin-bottom: 30px;
+}
+.icon-demo-content .col-sm-6:hover i {
+  color: #fff;
+  background-color: #3a80e5;
+}/*# sourceMappingURL=icon.css.map */

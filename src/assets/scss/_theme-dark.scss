@@ -1,0 +1,84 @@
+// :root CSS dark variables
+[data-bs-theme=dark]:root {
+  // Color system - Dark Mode only
+  --gray:     #030303;
+  $gray-100:  #20242a;
+  $gray-200:  #282c32;
+  $gray-300:  #212427;
+  $gray-400:  #878a99;
+  $gray-500:  #adb5bd;
+  $gray-600:  #adb1bb;
+  $gray-700:  #ced4da;
+  $gray-800:  #eff2f7;
+  $gray-900:  #f3f6f9;
+
+  --light:  #{$gray-200};
+  --gray-100: #{$gray-100};
+  --gray-200: #{$gray-200};
+  --gray-300: #{$gray-300};
+  --gray-400: #{$gray-400};
+  --gray-500: #{$gray-500};
+  --gray-600: #{$gray-600};
+  --gray-700: #{$gray-700};
+  --gray-800: #{$gray-800};
+  --gray-900: #{$gray-900};
+
+  // new 
+  --black:      #{$gray-900};
+  --muted:      #{$gray-600};
+
+  // overwrite dark color variables
+  --bs-primary-rgb: 48, 81, 137;
+  --light:  $gray-100;
+  --bs-white: #000;
+
+  // body
+  --bs-body-color: #{$gray-700};
+  --bs-secondary-color: #{$gray-400};
+  .card {
+    background-color: $gray-200;
+  }
+
+  
+}
+
+[data-bs-theme=dark]:root{
+  
+  // Color system - Dark Mode only
+  $gray-100: #20242a;
+  $gray-200: #282c32;
+  $gray-300: #212427;
+  $gray-400: #878a99;
+  $gray-500: #adb5bd;
+  $gray-600: #adb1bb;
+  $gray-700: #ced4da;
+  $gray-800: #eff2f7;
+    $gray-900: #f3f6f9;
+    
+    $grays: (
+      "100": $gray-100,
+      "200": $gray-200,
+      "300": $gray-300,
+      "400": $gray-400,
+      "500": $gray-500,
+      "600": $gray-600,
+      "700": $gray-700,
+      "800": $gray-800,
+      "900": $gray-900
+      );
+      
+      // Prefix for :root CSS variables
+      @each $color, $value in $grays {
+        --#{$variable-prefix}gray-#{$color}: #{$value};
+      }
+      
+      --#{$variable-prefix}body-bg :                       #{$gray-100};
+      --#{$variable-prefix}header-bg:                      #{$gray-200};
+      
+    // Border variable
+    --#{$variable-prefix}border-color:  #{lighten($gray-300, 15%)};
+    
+    // progress
+    --#{$variable-prefix}progress-bg: #{$gray-300};
+
+  }

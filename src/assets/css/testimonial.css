@@ -1,0 +1,34 @@
+/*==========================
+        Testimonial
+============================*/
+.testi_boxes {
+  border: 1px dashed #484848;
+  padding: 15px;
+}
+
+.client_review {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.client_name {
+  font-size: 16px;
+}
+
+.testi_boxes .bus_testi_icon {
+  font-size: 36px;
+}
+
+.logo_img:hover img {
+  transition: all 0.9s ease;
+  transform: scale(1.1);
+}
+.logo_img img {
+  max-height: 100px;
+  width: auto !important;
+  opacity: 0.3;
+}
+
+.logo_img img:hover {
+  opacity: 0.6;
+}/*# sourceMappingURL=testimonial.css.map */

@@ -1,0 +1,21 @@
+/*==========================
+        Features Box
+============================*/
+.lan_features_box .lan_features_icon i {
+  font-size: 32px;
+  color: #0b52e4;
+  height: 70px;
+  border-radius: 50%;
+  width: 70px;
+  line-height: 70px;
+  background: rgba(11, 82, 228, 0.09);
+  display: inline-block;
+}
+.lan_features_box .lan_features_content .lan_features_subtitle {
+  font-size: 18px;
+  line-height: 1.4;
+  max-width: 450px;
+}
+.lan_features_box p {
+  font-size: 15px;
+}/*# sourceMappingURL=features.css.map */

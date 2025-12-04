@@ -1,0 +1,33 @@
+<%- contentFor('HeaderCss') %>
+
+<%- contentFor('body') %>
+<!-- Login page -->
+<div class="account-background">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-4">
+                <div class="bg-form  rounded">
+                    <div class="text-center">
+                        <img src="assets/images/avatar/avatar-1.png" alt="" class="img-fluid rounded-circle img-thumbnail mb-2" height="12px" width="70;">
+                        <p class="text-white mt-2">Forgot Something?</p>
+                    </div>
+                    <form class="login_account">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <input type="password" class="form-control" placeholder="Password" required="">
+                            </div>
+                            <div class="col-lg-12 mt-2">
+                                <button class="btn btn-success w-100">Unlock</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="text-center mt-20">
+                    <p><small class="text-dark me-1">Don't have an account ?</small> <a href="/pages-register" class="text-dark fw-bold">Create an account</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Login Page -->
+<%- contentFor('FooterJs') %>

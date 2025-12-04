@@ -1,0 +1,8 @@
+.page-footer {
+  padding: 20px 0.75rem;
+  background-color: var(--header-bg);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: calc(100% - 240px);
+}/*# sourceMappingURL=footer.css.map */

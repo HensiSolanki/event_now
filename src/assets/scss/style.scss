@@ -1,0 +1,48 @@
+/*
+-------------------------------------------------------------------------
+* Template Name    : Fadmin - Admin* 
+* Author           : ThemesBoss                                         *
+* Version          : 2.0.0                                              *
+* Created          : July 2023                                          *
+* File Description : Main scss file of the admin                        *
+*------------------------------------------------------------------------
+*/
+
+// settings
+@import './node_modules/bootstrap/scss/functions';
+@import './node_modules/bootstrap/scss/variables';
+@import "variables";
+@import "./theme-light";
+@import "./theme-dark";
+@import "./node_modules/bootstrap/scss/bootstrap";
+@import './node_modules/bootstrap/scss/mixins';
+
+
+// custome scss
+@import "./components/helper.scss";
+@import "./components/button.scss";
+
+@import "./layout-boxed.scss";
+@import "./layout-blank.scss";
+@import "./layout-collapsed-sidebar.scss";
+
+@import "./left-sidebar.scss";
+
+@import "alert.scss";
+@import "blank-page.scss";
+@import "custom.scss";
+@import "dashboard.scss";
+@import "extra-page.scss";
+@import "general.scss";
+@import "icon.scss";
+@import "map.scss";
+@import "nav-accordions.scss";
+@import "card.scss";
+@import "progress.scss";
+@import "table.scss";
+@import "form.scss";
+@import "responsive.scss";
+@import "footer.scss";
+@import "card.scss";
+@import "navbar.scss";
+@import "apexcharts.scss";

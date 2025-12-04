@@ -1,0 +1,55 @@
+// apexchart scss
+.chart-container{
+    width:100%;
+    height:480px;
+    margin: auto;
+}
+.pie-chart-container,
+.doughnut-chart-container {
+    height:360px;
+    width:360px;
+    float:left;
+}
+
+.apexcharts-yaxis-label {
+    fill: $muted;
+}
+
+.apexcharts-xaxis-label{
+    fill: $muted;
+}
+
+.apexcharts-theme-light,
+.apexcharts-menu {
+    background: var(--#{$variable-prefix}header-bg) !important;
+    .apexcharts-menu-item {
+        &:hover {
+            background: var(--#{$variable-prefix}body-bg) !important;
+        }
+    }
+}
+
+.apexcharts-theme-light .apexcharts-menu-icon:hover svg {
+    fill: $muted !important;
+}
+
+.apexcharts-tooltip-title {
+    background: var(--#{$variable-prefix}body-bg) !important;
+}
+
+.apexcharts-xaxistooltip {
+    color: $muted !important;
+}
+
+.apexcharts-title-text,
+.apexcharts-text {
+    fill: #878a99;
+}
+
+.apexcharts-legend-text {
+    color: #878a99 !important;
+}
+
+.apexcharts-radialbar-hollow {
+    fill: var(--#{$variable-prefix}header-bg);
+}

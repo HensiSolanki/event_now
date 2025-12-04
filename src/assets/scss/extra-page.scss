@@ -1,0 +1,79 @@
+
+.account-background {
+    background-image: url(../images/ac-bg.jpg);
+    background-position: center center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .account-table {
+        display: table;
+        width: 100%;
+        height: 100%;
+    }
+    .account-table-cell {
+        display: table-cell;
+        vertical-align: middle;
+    }
+    .btn {
+        width: 100%;
+    }
+    .bg-form {
+        background-color: #202841;
+        color: #fff;
+        padding: 30px;
+        border-radius: 5px;
+    }
+    .account-logo {
+        height: 50px;
+    }
+}
+
+.ac_logo {
+    font-weight: 700 !important;
+}
+
+.account-background .login_account .form-control {
+    height: 46px;
+    border: none;
+    margin-bottom: 14px;
+    border: 2px solid #2b3250;
+    color: #fff;
+    background-color: #262e48;
+    border-radius: 0px;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.account-background .custom-control-label::before {
+    content: '';
+    background-color: #202841;
+    border: 2px solid #363d5d;
+    box-shadow: none;
+}
+
+.account-background .custom-checkbox .custom-control-input:checked~.custom-control-label::before {
+    content: '';
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.error_font {
+    font-size: 110px;
+    color: #313952;
+    font-weight: 600;
+    text-shadow: #ec536c 1px 1px, #ec536c 2px 2px, #ec536c 3px 3px;
+}
+
+.error_page {
+    .bg-form {
+        padding: 50px 40px !important;
+    }
+}
+
+.error_desc {
+    color: #fff;
+    margin-top: 55px;
+    font-size: 22px;
+    line-height: 1.4;
+}

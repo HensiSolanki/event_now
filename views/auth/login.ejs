@@ -1,0 +1,56 @@
+<%- contentFor('HeaderCss') %>
+
+  <%- contentFor('body') %>
+    <!-- Login page -->
+    <div class="account-background">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-4">
+            <div class="bg-form  rounded">
+              <div class="text-center">
+                <h4 class="text-uppercase ac_logo fw-bold my-3">Fadmin</h4>
+                <p class="text-white mt-2 mb-24">Sign into your account</p>
+              </div>
+              <% if(message.length> 0) { %>
+                <div class="alert alert-success text-center mb-4 flash" role="alert">
+                  <%= message %>
+                </div>
+                <% } %>
+                  <% if(error.length> 0) { %>
+                    <div class="alert alert-danger text-center mb-4 flash" role="alert">
+                      <%= error %>
+                    </div>
+                    <% } %>
+              <form class="login_account" method="post" novalidate action="auth-validate">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <input type="email" class="form-control" placeholder="Email" name="email" required="">
+                  </div>
+                  <div class="col-lg-12">
+                    <input type="password" class="form-control" id="exampleInputPassword3" name="password" placeholder="Password">
+                  </div>
+                  <div class="col-lg-12">
+                    <div class="checkbox">
+                      <label class="d-flex">
+                        <input class="me-2" type="checkbox">Remember me
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-lg-12 mb-24 mt-2">
+                    <button class="btn btn-danger w-100">Sign in</button>
+                  </div>
+                  <div class="text-center">
+                    <p class="mb-0"><a href="/forgotpassword" class="text-white fw-bold">Forgot your password ?</a></p>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="text-center mt-20">
+              <p><small class="text-dark me-1">Don't have an account ?</small> <a href="/register" class="text-dark fw-bold">Create an account</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Login Page -->
+    <%- contentFor('FooterJs') %>

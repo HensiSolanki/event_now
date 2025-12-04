@@ -1,0 +1,134 @@
+/* Page Title */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0px;
+    margin-bottom: 0px;
+    li {
+        a {
+            color: $primary;
+            font-size: 15px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        i {
+            font-size: 14px;
+            margin-right: 4px;
+            color: rgba(0, 0, 0, .4);
+            display: block;
+            float: left;
+        }
+    }
+}
+
+.breadcrumb-header {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.page-title {
+    .pull-right {
+        display: flex;
+        align-items: center;
+    }
+}
+
+/* Page Content */
+.page-content {
+    min-height: 56px;
+    vertical-align: bottom;
+    margin-left: $vertical-menu-width;
+}
+
+
+.page-sidebar-fixed {
+    .page-content {
+        margin-left: 240px;
+    }
+}
+
+.page-sidebar-fixed.page-sidebar-collapsed {
+    .page-content {
+        margin-left: 60px;
+    }
+}
+
+_::-webkit-full-page-media,
+_:future,
+:root .page-content {
+    vertical-align: top;
+}
+
+/* Page Inner */
+
+.page-inner {
+    position: relative;
+    min-height: calc(100% - 81px);
+    padding: calc(58px + 1.5rem) calc($spacer * 1) 88px calc($spacer * 1);
+    background: var(--#{$variable-prefix}body-bg);
+}
+
+.page-inner.no-page-title {
+    padding-top: 30px;
+}
+
+.page-inner.full-page {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+}
+
+.page-inner.full-page.no-footer {
+    padding-bottom: 0px;
+}
+
+.page-inner.full-page .page-footer {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+_::-webkit-full-page-media,
+_:future,
+:root .page-inner {
+    padding-bottom: 0px;
+}
+
+.page-header-fixed {
+    .page-inner {
+        margin-top: 77px;
+    }
+}
+
+/* Page Container */
+.page-container {
+    min-height: 100vh;
+}
+
+.page-container:not(.container) {
+    width: 100%;
+}
+
+
+// final 
+.page-sidebar-collapsed {
+    .page-content {
+        margin-left: $vertical-menu-width-sm;
+    }
+}   
+
+@media (max-width: 991px) {
+    .page-content {
+        margin-left: 0;
+    }
+    .page-sidebar-collapsed {
+        .page-content {
+            margin-left: $vertical-menu-width-sm;
+        }
+    }  
+}
+
+@media (max-width: 778px) {
+    .page-content {
+        margin-left: 0;
+    }
+}

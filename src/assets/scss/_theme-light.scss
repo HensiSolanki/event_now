@@ -1,0 +1,15 @@
+:root {    
+    // new 
+    --black:      #{$black};
+    --muted:      #{$gray-600};
+    --light:      #{$gray-100};
+    .card {
+        background-color: $white;
+    }
+    // final
+    --#{$variable-prefix}body-bg:                      #{$gray-100};
+    --#{$variable-prefix}header-bg:                    #{$white};
+
+    // progress
+    --#{$variable-prefix}progress-bg: #{$gray-300};
+}

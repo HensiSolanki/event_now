@@ -1,0 +1,50 @@
+// layout boxed
+
+[data-layout=boxed] {
+    @media (min-width: 992px) {
+        .page-header {
+            position: absolute;
+            width: calc(100% - 258px);
+            left: 258px;
+        }
+        .page-inner {
+            margin-left: calc($vertical-menu-width + 10px);
+        }
+    }
+    .page-sidebar {
+        border-left: 1px solid var(--#{$variable-prefix}border-color);
+        border-radius: var(--#{$variable-prefix}border-radius);
+    }
+    .page-sidebar-collapsed {
+        .page-inner {
+            margin-left: 72px;
+        }
+        .page-footer {
+            width: calc(100% - 76px);
+        }
+        .page-content {
+            margin-left: 0px;
+        }
+        .page-header {
+            left: 81px;
+            width: calc(100% - 81px);
+        }
+    }
+    .page-content {
+        margin-left: 0;
+    }
+    .page-container {
+        position: relative;
+    }
+    .page-footer {
+        border-radius: 0 6px 0 0;
+        right: 0px;
+        border-right: 1px solid var(--#{$variable-prefix}border-color);
+        border-left: 1px solid var(--#{$variable-prefix}border-color);
+    }
+    @media (max-width: 992px) {
+        .container {
+            max-width: 100%;
+        }
+    }
+}

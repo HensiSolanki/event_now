@@ -1,0 +1,28 @@
+.progress-bar {
+  background-color: #3a80e5;
+  box-shadow: none;
+}
+
+.progress {
+  -webkit-box-shadow: none;
+  background-color: #e9ecef;
+  box-shadow: none;
+  height: 16px;
+  overflow: hidden;
+}
+
+.progress-bar-success {
+  background-color: #0acf97;
+}
+
+.progress-bar-info {
+  background-color: #40a4f1;
+}
+
+.progress-bar-warning {
+  background-color: #f5b225;
+}
+
+.progress-bar-danger {
+  background-color: #ec536c;
+}/*# sourceMappingURL=progress.css.map */

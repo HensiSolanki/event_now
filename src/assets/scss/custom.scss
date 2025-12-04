@@ -1,0 +1,176 @@
+
+.bg-primary {
+    background-color: $primary !important;
+}
+
+.bg-success {
+    background-color: #0acf97 !important;
+}
+
+.bg-info {
+    background-color: #40a4f1 !important;
+}
+
+.bg-warning {
+    background-color: #f5b225 !important;
+}
+
+.bg-danger {
+    background-color: #ec536c !important;
+}
+
+.bg-muted {
+    background-color: var(--muted) !important;
+}
+
+.bg-white {
+    background-color: #ffffff !important;
+}
+
+.text-white {
+    color: #ffffff !important;
+}
+
+.text-danger {
+    color: #ec536c !important;
+}
+
+.text-muted {
+    color: $muted !important;
+}
+
+.text-custom {
+    color: $primary !important;
+}
+
+.text-primary {
+    color: $primary !important;
+}
+
+.text-warning {
+    color: #f5b225 !important;
+}
+
+.text-success {
+    color: #0acf97 !important;
+}
+
+.text-info {
+    color: #40a4f1 !important;
+}
+
+.text-dark {
+    color: #2d3b48 !important;
+}
+
+.badge {
+    font-weight: 500;
+}
+
+.badge-default {
+    background-color: #eff3f6;
+    color: #2d3b48;
+}
+
+.badge-primary {
+    background-color: $primary;
+}
+
+.badge-success {
+    background-color: #0acf97;
+}
+
+.badge-info {
+    background-color: #40a4f1;
+}
+
+.badge-warning {
+    background-color: #f5b225;
+}
+
+.badge-danger {
+    background-color: #ec536c;
+}
+
+.badge-dark {
+    background-color: #2d3b48;
+}
+
+
+/* List Group */
+
+.list-group-item.active {
+    background-color: #dddddd;
+    border-color: #dddddd;
+    color: #444444;
+    z-index: 2;
+}
+
+.list-group-item.active:hover {
+    background-color: #dddddd;
+    border-color: #dddddd;
+    color: #444444;
+    z-index: 2;
+}
+
+.list-group-item.active:hover .list-group-item-text {
+    color: $primary;
+}
+
+.list-group-item.active:focus {
+    background-color: #dddddd;
+    border-color: #dddddd;
+    color: #444444;
+    z-index: 2;
+}
+
+.list-group-item.active:focus .list-group-item-text {
+    color: $primary;
+}
+
+.list-group-item.active .list-group-item-text {
+    color: $primary;
+}
+
+.list-group-item {
+    border-radius: 0;
+    padding: 12px 20px;
+    border: 1px solid fade(#2d3b48, 6%);
+}
+
+.list-group-item:first-child {
+    border-radius: 0;
+    padding: 12px 20px;
+}
+
+.list-group-item:last-child {
+    border-radius: 0;
+    padding: 12px 20px;
+}
+
+.list-group-item.active>.badge {
+    color: $primary;
+}
+
+.popover-header {
+    margin-top: 0;
+}
+
+.blockquote {
+    font-size: 1.05rem;
+}
+
+.modal-title {
+    margin-top: 0;
+}
+
+.bg-overlay.show {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: #000;
+    top: 0;
+    bottom: 0;
+    z-index: 99;
+    opacity: 0.5;
+}

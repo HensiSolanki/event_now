@@ -1,0 +1,34 @@
+<%- include ('../partials/main') %>
+
+<head>
+  <%- include ('../partials/title-meta') %>
+  <%- HeaderCss %>
+  <%- include ('../partials/head-css.ejs') %>
+
+</head>
+
+<body>
+    <%- include ('../partials/menu') %>
+    <!-- Page Content -->
+    <div class="page-content">
+      <!-- Page Inner -->
+      <div class="page-inner">
+          <div class="container-fluid" id="main-wrapper">
+          <%- body%>
+          </div>
+      </div>
+      <!-- End Page-content -->
+      <%- include ('../partials/footer') %>
+      <%- include ('../partials/right-sidebar') %>
+    </div>
+      
+    <!-- end main content-->
+
+  <!-- END layout-wrapper -->
+  <%- include ('../partials/vendor-scripts') %>
+  <%- FooterJs %>
+<!-- Custom Js -->
+<script src="assets/js/custom.js"></script>
+</body>
+
+</html>

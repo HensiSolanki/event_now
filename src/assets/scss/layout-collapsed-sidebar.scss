@@ -1,0 +1,32 @@
+
+[data-layout=collapsed] {
+    .page-sidebar-fixed.page-sidebar-collapsed {
+        .page-content {
+            margin-left: 60px !important;
+        }
+    }
+    .page-sidebar-collapsed {
+        .page-header {
+            width: calc(100% - 60px);
+        }
+        .page-sidebar {
+            width: 60px;
+            display: block;
+        }
+        .logo-box {
+            display: block;
+            min-height: 60px;
+            height: 60px;
+            #fixed-sidebar-toggle-button {
+                display: block;
+            }
+            .mdi-close {
+                display: none !important;
+            }
+        }
+        .page-footer {
+            left: 60px;
+            width: calc(100% - 60px) !important;
+        }
+    }
+}

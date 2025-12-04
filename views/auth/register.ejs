@@ -1,0 +1,61 @@
+<%- contentFor('HeaderCss') %>
+
+  <%- contentFor('body') %>
+    <!-- Login page -->
+    <div class="account-background">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-4">
+            <div class="bg-form  rounded">
+              <div class="text-center">
+                <h4 class="text-uppercase ac_logo fw-bold my-3">Fadmin</h4>
+                <p class="text-white mt-2 mb-24">Sign into your account</p>
+              </div>
+              <% if(message.length> 0) { %>
+                <div class="alert alert-success text-center mb-4 flash" role="alert">
+                  <%= message %>
+                </div>
+                <% } %>
+                  <% if(error.length> 0) { %>
+                    <div class="alert alert-danger text-center mb-4 flash" role="alert">
+                      <%= error %>
+                    </div>
+                    <% } %>
+                      <form class="login_account" action="/signup" method="post">
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div class="form-group">
+                              <label class="sr-only" for="exampleInputName2">Name</label>
+                              <input type="text" class="form-control" name="username" id="exampleInputName2" placeholder="Jane Doe">
+                            </div>
+                          </div>
+                          <div class="col-lg-12">
+                            <input type="email" class="form-control" name="email" placeholder="Email" required="">
+                          </div>
+                          <div class="col-lg-12">
+                            <input type="password" class="form-control" name="password" id="exampleInputPassword3" placeholder="Password">
+                          </div>
+                          <div class="col-lg-12">
+                            <div class="checkbox">
+                              <label class="d-flex">
+                                <input class="me-1" type="checkbox">I Accept <a href="#" class="text-info ms-1">Terms And Condition</a>
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-lg-12">
+                            <button class="btn btn-danger">Sign in</button>
+                          </div>
+                        </div>
+                      </form>
+            </div>
+            <div class="text-center mt-20">
+              <p><small class="text-dark me-1">Don't have an account ?</small> <a href="/login" class="text-dark fw-bold">Sign In</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Login Page -->
+    <!-- end auth-page-wrapper -->
+
+    <%- contentFor('FooterJs') %>
