@@ -1,49 +1,63 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
+const sequelize = require("../config/database");
 
-const UserSchema = new mongoose.Schema({
+const User = sequelize.define('User', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
     name: {
-        type: String,
-        required: true
+        type: DataTypes.STRING(255),
+        allowNull: false
     },
     email: {
-        type: String,
-        required: [true, 'Please provide your email'],
+        type: DataTypes.STRING(255),
+        allowNull: false,
         unique: true,
+        validate: {
+            isEmail: true
+        }
     },
     password: {
-        type: String,
-        required: true
+        type: DataTypes.STRING(255),
+        allowNull: false
     },
-    created_at: Date,
-    passwordResetToken: String,
-    passwordResetExpires: Date,
-})
-
-UserSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) return next();
-
-    // Hash the password with cost of 12
-    this.password = await bcrypt.hash(this.password, 12);
-
-    // Delete passwordConfirm field
-    this.passwordConfirm = undefined;
-    next();
+    passwordResetToken: {
+        type: DataTypes.STRING(255),
+        allowNull: true
+    },
+    passwordResetExpires: {
+        type: DataTypes.DATE,
+        allowNull: true
+    }
+}, {
+    tableName: 'users',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    hooks: {
+        beforeSave: async (user) => {
+            if (user.changed('password')) {
+                user.password = await bcrypt.hash(user.password, 12);
+            }
+        }
+    }
 });
 
 /**
- * Reset Password
+ * Instance method to create password reset token
  */
-UserSchema.methods.createPasswordResetToken = function () {
+User.prototype.createPasswordResetToken = function () {
     let resetToken = crypto.randomBytes(32).toString('hex');
     this.passwordResetToken = resetToken;
-    resetToken = resetToken + "|" + this._id;
-    this.created_at = Date.now()
-    this.passwordResetExpires = Date.now() + 60 * 60 * 1000;
+    resetToken = resetToken + "|" + this.id;
+    this.passwordResetExpires = new Date(Date.now() + 60 * 60 * 1000);
     let bufferObj = Buffer.from(resetToken, "utf8");
     resetToken = bufferObj.toString("base64");
     return resetToken;
-}
-const user = mongoose.model('users', UserSchema);
-module.exports = user;
+};
+
+module.exports = User;
