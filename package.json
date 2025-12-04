@@ -5,7 +5,9 @@
   "main": "app.js",
   "scripts": {
     "dev": "gulp",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "migrate": "node migrations/migrate.js",
+    "migrate:rollback": "node migrations/rollback.js"
   },
   "author": "Themeboss",
   "license": "ISC",

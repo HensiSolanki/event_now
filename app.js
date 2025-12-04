@@ -9,6 +9,7 @@ var http = require('http').Server(app);
 var pageRouter = require('./routes/routes');
 var apiAuthRouter = require('./routes/authRoutes');
 var user = require("./models/UserModel");
+var placeCategory = require("./models/PlaceCategoryModel");
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
