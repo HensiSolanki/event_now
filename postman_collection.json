@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Event Now - Complete API",
-    "description": "Complete API collection for Event Now application including Authentication, Place Categories, Places, and Ratings",
+    "description": "Complete API collection for Event Now application including Authentication, Place Categories, Places, Ratings, Favorites, and Bookings",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -23,6 +23,16 @@
     {
       "key": "place_id",
       "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "booking_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "booking_reference",
+      "value": "",
       "type": "string"
     }
   ],
@@ -1236,6 +1246,386 @@
               "path": ["api", "auth", "places", "favorites", "stats"]
             },
             "description": "Get user's favorite statistics including total count and breakdown by category"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Place Bookings (Protected)",
+      "item": [
+        {
+          "name": "Create Booking",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"place_id\": {{place_id}},\n    \"booking_date\": \"2024-12-25\",\n    \"booking_time\": \"19:00:00\",\n    \"number_of_guests\": 4,\n    \"full_name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"+1234567890\",\n    \"special_requests\": \"Window seat preferred. Celebrating anniversary.\",\n    \"total_amount\": 150.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/bookings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "bookings"]
+            },
+            "description": "Create a new booking for a place. Requires authentication. Returns booking with auto-generated reference number."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All User Bookings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/bookings?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "bookings"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number for pagination"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Number of items per page"
+                },
+                {
+                  "key": "status",
+                  "value": "confirmed",
+                  "disabled": true,
+                  "description": "Filter by status: pending, confirmed, cancelled, completed"
+                },
+                {
+                  "key": "place_id",
+                  "value": "{{place_id}}",
+                  "disabled": true,
+                  "description": "Filter by specific place"
+                },
+                {
+                  "key": "date_from",
+                  "value": "2024-12-01",
+                  "disabled": true,
+                  "description": "Filter bookings from date (YYYY-MM-DD)"
+                },
+                {
+                  "key": "date_to",
+                  "value": "2024-12-31",
+                  "disabled": true,
+                  "description": "Filter bookings to date (YYYY-MM-DD)"
+                }
+              ]
+            },
+            "description": "Get all bookings for the authenticated user with filtering and pagination support"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Booking by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/bookings/{{booking_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "bookings", "{{booking_id}}"]
+            },
+            "description": "Get detailed information about a specific booking including place details and images"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Booking by Reference",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/bookings/reference/{{booking_reference}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "bookings", "reference", "{{booking_reference}}"]
+            },
+            "description": "Look up a booking using its reference number (e.g., BK17334567891234)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Upcoming Bookings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/bookings/upcoming/list",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "bookings", "upcoming", "list"]
+            },
+            "description": "Get all upcoming bookings (pending or confirmed with future dates) for the authenticated user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Booking History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/bookings/history/list?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "bookings", "history", "list"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Number of items per page"
+                }
+              ]
+            },
+            "description": "Get past, completed, and cancelled bookings for the authenticated user with pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Booking Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/bookings/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "bookings", "stats"]
+            },
+            "description": "Get booking statistics for the authenticated user including total, upcoming, completed, cancelled, and pending counts"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Booking",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"booking_date\": \"2024-12-26\",\n    \"booking_time\": \"20:00:00\",\n    \"number_of_guests\": 6,\n    \"special_requests\": \"Birthday celebration - need a cake table\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/bookings/{{booking_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "bookings", "{{booking_id}}"]
+            },
+            "description": "Update an existing booking. All fields are optional. Cannot update cancelled or completed bookings."
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Booking",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cancellation_reason\": \"Change of plans - unable to attend\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/bookings/{{booking_id}}/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "bookings", "{{booking_id}}", "cancel"]
+            },
+            "description": "Cancel an existing booking. Cannot cancel already cancelled or completed bookings. Cancellation reason is optional."
+          },
+          "response": []
+        },
+        {
+          "name": "Filter Bookings by Status - Confirmed",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/bookings?status=confirmed",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "bookings"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "confirmed"
+                }
+              ]
+            },
+            "description": "Get only confirmed bookings for the authenticated user"
+          },
+          "response": []
+        },
+        {
+          "name": "Filter Bookings by Status - Pending",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/bookings?status=pending",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "bookings"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "pending"
+                }
+              ]
+            },
+            "description": "Get only pending bookings for the authenticated user"
+          },
+          "response": []
+        },
+        {
+          "name": "Filter Bookings by Date Range",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/bookings?date_from=2024-12-01&date_to=2024-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "bookings"],
+              "query": [
+                {
+                  "key": "date_from",
+                  "value": "2024-12-01",
+                  "description": "Start date (YYYY-MM-DD)"
+                },
+                {
+                  "key": "date_to",
+                  "value": "2024-12-31",
+                  "description": "End date (YYYY-MM-DD)"
+                }
+              ]
+            },
+            "description": "Get bookings within a specific date range"
+          },
+          "response": []
+        },
+        {
+          "name": "Filter Bookings by Place",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/bookings?place_id={{place_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "bookings"],
+              "query": [
+                {
+                  "key": "place_id",
+                  "value": "{{place_id}}",
+                  "description": "Filter bookings for a specific place"
+                }
+              ]
+            },
+            "description": "Get all bookings for a specific place made by the authenticated user"
           },
           "response": []
         }

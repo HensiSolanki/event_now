@@ -4,6 +4,7 @@ const PlaceImage = require('./PlaceImageModel');
 const PlaceRating = require('./PlaceRatingModel');
 const User = require('./UserModel');
 const FavoritePlace = require('./FavoritePlaceModel');
+const PlaceBooking = require('./PlaceBookingModel');
 
 /**
  * Define model associations
@@ -97,12 +98,39 @@ FavoritePlace.belongsTo(Place, {
     as: 'place'
 });
 
+// Place has many PlaceBookings
+Place.hasMany(PlaceBooking, {
+    foreignKey: 'place_id',
+    as: 'bookings',
+    onDelete: 'CASCADE'
+});
+
+// PlaceBooking belongs to Place
+PlaceBooking.belongsTo(Place, {
+    foreignKey: 'place_id',
+    as: 'place'
+});
+
+// User has many PlaceBookings
+User.hasMany(PlaceBooking, {
+    foreignKey: 'user_id',
+    as: 'bookings',
+    onDelete: 'CASCADE'
+});
+
+// PlaceBooking belongs to User
+PlaceBooking.belongsTo(User, {
+    foreignKey: 'user_id',
+    as: 'user'
+});
+
 module.exports = {
     Place,
     PlaceCategory,
     PlaceImage,
     PlaceRating,
     User,
-    FavoritePlace
+    FavoritePlace,
+    PlaceBooking
 };
 

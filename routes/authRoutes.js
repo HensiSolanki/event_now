@@ -3,6 +3,7 @@ const router = express.Router();
 const authController = require('../controllers/api/authController');
 const placeCategoryController = require('../controllers/api/placeCategoryController');
 const placeController = require('../controllers/api/placeController');
+const placeBookingController = require('../controllers/api/placeBookingController');
 const { protect } = require('../middleware/authMiddleware');
 const { categoryUpload, placeUpload } = require('../middleware/upload');
 
@@ -163,6 +164,46 @@ router.post('/places/:id/favorites', protect, placeController.addToFavorites);
 // @desc    Remove place from favorites
 // @access  Private (requires authentication)
 router.delete('/places/:id/favorites', protect, placeController.removeFromFavorites);
+
+/**
+ * Place Booking Routes
+ * Base URL: /api/auth/bookings
+ */
+
+// @route   POST /api/auth/bookings
+// @desc    Create a new booking
+// @access  Private (requires authentication)
+router.post('/bookings', protect, placeBookingController.createBooking);
+
+// @route   GET /api/auth/bookings
+// @desc    Get all user's bookings (with filters and pagination)
+// @access  Private (requires authentication)
+router.get('/bookings', protect, placeBookingController.getAllBookings);
+
+// @route   GET /api/auth/bookings/upcoming/list
+// @desc    Get upcoming bookings
+// @access  Private (requires authentication)
+router.get('/bookings/upcoming/list', protect, placeBookingController.getUpcomingBookings);
+
+// @route   GET /api/auth/bookings/history/list
+// @desc    Get booking history (past bookings)
+// @access  Private (requires authentication)
+router.get('/bookings/history/list', protect, placeBookingController.getBookingHistory);
+
+// @route   GET /api/auth/bookings/:id
+// @desc    Get booking by ID
+// @access  Private (requires authentication)
+router.get('/bookings/:id', protect, placeBookingController.getBookingById);
+
+// @route   PUT /api/auth/bookings/:id
+// @desc    Update booking
+// @access  Private (requires authentication)
+router.put('/bookings/:id', protect, placeBookingController.updateBooking);
+
+// @route   PATCH /api/auth/bookings/:id/cancel
+// @desc    Cancel booking
+// @access  Private (requires authentication)
+router.patch('/bookings/:id/cancel', protect, placeBookingController.cancelBooking);
 
 module.exports = router;
 
