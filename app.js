@@ -8,8 +8,11 @@ var http = require('http').Server(app);
 // import Router file
 var pageRouter = require('./routes/routes');
 var apiAuthRouter = require('./routes/authRoutes');
+
+// Import models and associations
 var user = require("./models/UserModel");
-var placeCategory = require("./models/PlaceCategoryModel");
+var associations = require("./models/associations");
+const { Place, PlaceCategory, PlaceImage, PlaceRating } = associations;
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');

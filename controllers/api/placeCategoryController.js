@@ -218,39 +218,6 @@ const placeCategoryController = {
     },
 
     /**
-     * Toggle category active status
-     * PATCH /api/place-categories/:id/toggle
-     */
-    toggleCategoryStatus: async (req, res) => {
-        try {
-            const { id } = req.params;
-            const category = await PlaceCategory.findByPk(id);
-
-            if (!category) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'Category not found'
-                });
-            }
-
-            await category.toggleActive();
-
-            res.status(200).json({
-                success: true,
-                message: `Category ${category.is_active ? 'activated' : 'deactivated'} successfully`,
-                data: category
-            });
-        } catch (error) {
-            console.error('Error toggling category status:', error);
-            res.status(500).json({
-                success: false,
-                message: 'Error toggling category status',
-                error: error.message
-            });
-        }
-    },
-
-    /**
      * Delete category
      * DELETE /api/place-categories/:id
      */

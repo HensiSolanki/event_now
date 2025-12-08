@@ -1,0 +1,1247 @@
+{
+  "info": {
+    "name": "Event Now - Complete API",
+    "description": "Complete API collection for Event Now application including Authentication, Place Categories, Places, and Ratings",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "category_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "place_id",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\",\n  \"confirmPassword\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["register"]
+            },
+            "description": "Register a new user account. Returns JWT token on success."
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["login"]
+            },
+            "description": "Login with existing credentials. Returns JWT token on success."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User Profile (Protected)",
+      "item": [
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["me"]
+            },
+            "description": "Get profile of currently logged-in user. Requires JWT token."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Name\",\n  \"email\": \"newemail@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/update-profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "update-profile"]
+            },
+            "description": "Update user name and/or email. Requires JWT token."
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"password123\",\n  \"newPassword\": \"newpassword456\",\n  \"confirmPassword\": \"newpassword456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/change-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "change-password"]
+            },
+            "description": "Change user password. Requires current password and JWT token. Returns new token."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Test Cases",
+      "item": [
+        {
+          "name": "Invalid Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"wrongpassword\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Test invalid login credentials - should return 401 error"
+          },
+          "response": []
+        },
+        {
+          "name": "Duplicate Registration",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Another User\",\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\",\n  \"confirmPassword\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Test registration with existing email - should return 400 error"
+          },
+          "response": []
+        },
+        {
+          "name": "Protected Route Without Token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Test accessing protected route without token - should return 401 error"
+          },
+          "response": []
+        },
+        {
+          "name": "Invalid Token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer invalid.token.here",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Test with invalid token - should return 401 error"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Place Categories",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/place-categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "place-categories"]
+            },
+            "description": "Fetch all place categories ordered by sort_order"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Active Categories Only",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/place-categories?active_only=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "place-categories"],
+              "query": [
+                {
+                  "key": "active_only",
+                  "value": "true",
+                  "description": "Filter only active categories"
+                }
+              ]
+            },
+            "description": "Fetch only active place categories"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Category by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/place-categories/{{category_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "place-categories", "{{category_id}}"]
+            },
+            "description": "Fetch a single category by its ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Category by Slug",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/place-categories/slug/sports",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "place-categories", "slug", "sports"]
+            },
+            "description": "Fetch a single category by its slug"
+          },
+          "response": []
+        },
+        {
+          "name": "Create New Category",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Sports",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Sports venues and activities including stadiums, gyms, and sports bars",
+                  "type": "text"
+                },
+                {
+                  "key": "icon",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "color",
+                  "value": "#FF5722",
+                  "type": "text"
+                },
+                {
+                  "key": "is_active",
+                  "value": "true",
+                  "type": "text"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "1",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/place-categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "place-categories"]
+            },
+            "description": "Create a new place category with icon upload. Slug will be auto-generated from name if not provided."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category - Clubs",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Clubs",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Nightclubs and dance clubs for nightlife entertainment",
+                  "type": "text"
+                },
+                {
+                  "key": "icon",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "color",
+                  "value": "#9C27B0",
+                  "type": "text"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "2",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/place-categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "place-categories"]
+            },
+            "description": "Create Clubs category with optional icon"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category - Live Bands",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Live Bands",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Venues featuring live band performances and concerts",
+                  "type": "text"
+                },
+                {
+                  "key": "icon",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "color",
+                  "value": "#3F51B5",
+                  "type": "text"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "3",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/place-categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "place-categories"]
+            },
+            "description": "Create Live Bands category with optional icon"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category - DJ",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "DJ",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Venues with DJ performances and electronic music",
+                  "type": "text"
+                },
+                {
+                  "key": "icon",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "color",
+                  "value": "#00BCD4",
+                  "type": "text"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "4",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/place-categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "place-categories"]
+            },
+            "description": "Create DJ category with optional icon"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Updated Sports",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Updated description for sports venues",
+                  "type": "text"
+                },
+                {
+                  "key": "icon",
+                  "type": "file",
+                  "src": [],
+                  "description": "Optional: Upload new icon to replace existing one"
+                },
+                {
+                  "key": "color",
+                  "value": "#E91E63",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/place-categories/{{category_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "place-categories", "{{category_id}}"]
+            },
+            "description": "Update an existing category. Can optionally upload new icon."
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Category Status",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/place-categories/{{category_id}}/toggle",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "place-categories", "{{category_id}}", "toggle"]
+            },
+            "description": "Toggle the is_active status of a category"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/place-categories/{{category_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "place-categories", "{{category_id}}"]
+            },
+            "description": "Delete a category permanently"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Places",
+      "item": [
+        {
+          "name": "Get All Places",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places?page=1&limit=20&active_only=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number for pagination"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Number of items per page"
+                },
+                {
+                  "key": "category_id",
+                  "value": "{{category_id}}",
+                  "disabled": true,
+                  "description": "Filter by category ID"
+                },
+                {
+                  "key": "active_only",
+                  "value": "true",
+                  "description": "Show only active places"
+                },
+                {
+                  "key": "featured_only",
+                  "value": "true",
+                  "disabled": true,
+                  "description": "Show only featured places"
+                },
+                {
+                  "key": "search",
+                  "value": "restaurant",
+                  "disabled": true,
+                  "description": "Search in name, description, location"
+                },
+                {
+                  "key": "pricing",
+                  "value": "moderate",
+                  "disabled": true,
+                  "description": "Filter by pricing: free, budget, moderate, expensive, luxury"
+                },
+                {
+                  "key": "sort_by",
+                  "value": "average_rating",
+                  "disabled": true,
+                  "description": "Sort by: created_at, name, average_rating, view_count, total_ratings"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "DESC",
+                  "disabled": true,
+                  "description": "ASC or DESC"
+                }
+              ]
+            },
+            "description": "Get list of all places with filtering, searching, sorting, and pagination support"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Place by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}"]
+            },
+            "description": "Get detailed information about a specific place including images, ratings, and category"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Place",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "category_id",
+                  "value": "{{category_id}}",
+                  "type": "text",
+                  "description": "Required - Category ID"
+                },
+                {
+                  "key": "name",
+                  "value": "The Grand Restaurant",
+                  "type": "text",
+                  "description": "Required - Place name"
+                },
+                {
+                  "key": "slug",
+                  "value": "the-grand-restaurant",
+                  "type": "text",
+                  "description": "Optional - Auto-generated from name if not provided"
+                },
+                {
+                  "key": "description",
+                  "value": "A fine dining restaurant with exceptional cuisine and ambiance. Perfect for special occasions and business meetings.",
+                  "type": "text"
+                },
+                {
+                  "key": "location",
+                  "value": "123 Main Street, Downtown, City Name, 12345",
+                  "type": "text"
+                },
+                {
+                  "key": "latitude",
+                  "value": "40.7128",
+                  "type": "text",
+                  "description": "GPS latitude coordinate"
+                },
+                {
+                  "key": "longitude",
+                  "value": "-74.0060",
+                  "type": "text",
+                  "description": "GPS longitude coordinate"
+                },
+                {
+                  "key": "pricing",
+                  "value": "expensive",
+                  "type": "text",
+                  "description": "Pricing level: free, budget, moderate, expensive, luxury"
+                },
+                {
+                  "key": "price_range_min",
+                  "value": "50.00",
+                  "type": "text",
+                  "description": "Minimum price"
+                },
+                {
+                  "key": "price_range_max",
+                  "value": "200.00",
+                  "type": "text",
+                  "description": "Maximum price"
+                },
+                {
+                  "key": "opening_time",
+                  "value": "11:00:00",
+                  "type": "text",
+                  "description": "Opening time (24-hour format HH:MM:SS)"
+                },
+                {
+                  "key": "closing_time",
+                  "value": "23:00:00",
+                  "type": "text",
+                  "description": "Closing time (24-hour format HH:MM:SS)"
+                },
+                {
+                  "key": "is_open_24_7",
+                  "value": "false",
+                  "type": "text",
+                  "description": "Is the place open 24/7?"
+                },
+                {
+                  "key": "operating_days",
+                  "value": "[\"monday\",\"tuesday\",\"wednesday\",\"thursday\",\"friday\",\"saturday\",\"sunday\"]",
+                  "type": "text",
+                  "description": "JSON array of operating days"
+                },
+                {
+                  "key": "phone",
+                  "value": "+1-234-567-8900",
+                  "type": "text",
+                  "description": "Contact phone number"
+                },
+                {
+                  "key": "email",
+                  "value": "info@grandrestaurant.com",
+                  "type": "text",
+                  "description": "Contact email"
+                },
+                {
+                  "key": "website",
+                  "value": "https://www.grandrestaurant.com",
+                  "type": "text",
+                  "description": "Website URL"
+                },
+                {
+                  "key": "is_featured",
+                  "value": "true",
+                  "type": "text",
+                  "description": "Mark as featured place"
+                },
+                {
+                  "key": "is_active",
+                  "value": "true",
+                  "type": "text",
+                  "description": "Active status"
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": [],
+                  "description": "Upload first image (up to 10 images)"
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": [],
+                  "description": "Upload second image"
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": [],
+                  "description": "Upload third image"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places"]
+            },
+            "description": "Create a new place with multiple images (up to 10). First image becomes primary automatically."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Place",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "The Grand Restaurant - Updated",
+                  "type": "text",
+                  "description": "Update place name"
+                },
+                {
+                  "key": "description",
+                  "value": "Updated description with new information about our restaurant",
+                  "type": "text"
+                },
+                {
+                  "key": "pricing",
+                  "value": "luxury",
+                  "type": "text"
+                },
+                {
+                  "key": "is_featured",
+                  "value": "true",
+                  "type": "text"
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": [],
+                  "description": "Optional - Add more images"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}"]
+            },
+            "description": "Update place information. All fields are optional. Can add more images."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Place",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}"]
+            },
+            "description": "Delete a place permanently. This also deletes all associated images and ratings."
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Place Active Status",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}/toggle-active",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}", "toggle-active"]
+            },
+            "description": "Toggle the active/inactive status of a place"
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Place Featured Status",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}/toggle-featured",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}", "toggle-featured"]
+            },
+            "description": "Toggle the featured status of a place"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Places by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places?category_id={{category_id}}&active_only=true&sort_by=average_rating&sort_order=DESC",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places"],
+              "query": [
+                {
+                  "key": "category_id",
+                  "value": "{{category_id}}"
+                },
+                {
+                  "key": "active_only",
+                  "value": "true"
+                },
+                {
+                  "key": "sort_by",
+                  "value": "average_rating"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "DESC"
+                }
+              ]
+            },
+            "description": "Get places filtered by category and sorted by rating"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Places by Pricing",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places?pricing=moderate&active_only=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places"],
+              "query": [
+                {
+                  "key": "pricing",
+                  "value": "moderate"
+                },
+                {
+                  "key": "active_only",
+                  "value": "true"
+                }
+              ]
+            },
+            "description": "Get places by pricing level (free, budget, moderate, expensive, luxury)"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Places by Keyword",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places?search=restaurant&sort_by=average_rating&sort_order=DESC",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "restaurant"
+                },
+                {
+                  "key": "sort_by",
+                  "value": "average_rating"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "DESC"
+                }
+              ]
+            },
+            "description": "Search places by keyword in name, description, or location"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Featured Places",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places?featured_only=true&active_only=true&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places"],
+              "query": [
+                {
+                  "key": "featured_only",
+                  "value": "true"
+                },
+                {
+                  "key": "active_only",
+                  "value": "true"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get only featured places"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Place Images",
+      "item": [
+        {
+          "name": "Delete Place Image",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}/images/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}", "images", "1"]
+            },
+            "description": "Delete a specific image from a place. Provide image ID in URL."
+          },
+          "response": []
+        },
+        {
+          "name": "Set Primary Image",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}/images/2/set-primary",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}", "images", "2", "set-primary"]
+            },
+            "description": "Set a specific image as the primary/featured image for the place"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Place Ratings & Reviews",
+      "item": [
+        {
+          "name": "Add/Update Rating",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"rating\": 4.5,\n    \"review\": \"Excellent food and service! The ambiance was perfect for our anniversary dinner. Highly recommended!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}/ratings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}", "ratings"]
+            },
+            "description": "Add a new rating or update existing rating for a place. Requires authentication. If user already rated, updates existing rating."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Place Ratings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}/ratings?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}", "ratings"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of ratings per page"
+                }
+              ]
+            },
+            "description": "Get all ratings and reviews for a place with pagination. Also returns rating distribution (1-5 stars)."
+          },
+          "response": []
+        },
+        {
+          "name": "Add Rating without Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"rating\": 5.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}/ratings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}", "ratings"]
+            },
+            "description": "Add rating without review text. Review is optional."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Favorite Places (Protected)",
+      "item": [
+        {
+          "name": "Get User's Favorites",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/favorites/my-favorites?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "favorites", "my-favorites"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number for pagination"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Number of items per page"
+                }
+              ]
+            },
+            "description": "Get all favorite places for the authenticated user with pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Add to Favorites",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}/favorites",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}", "favorites"]
+            },
+            "description": "Add a place to user's favorites. Requires authentication. Returns success even if already favorited."
+          },
+          "response": []
+        },
+        {
+          "name": "Remove from Favorites",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}/favorites",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}", "favorites"]
+            },
+            "description": "Remove a place from user's favorites. Requires authentication."
+          },
+          "response": []
+        },
+        {
+          "name": "Check Favorite Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}/favorites/check",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}", "favorites", "check"]
+            },
+            "description": "Check if a specific place is in user's favorites. Returns is_favorited boolean."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Favorite Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/favorites/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "favorites", "stats"]
+            },
+            "description": "Get user's favorite statistics including total count and breakdown by category"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
+
+

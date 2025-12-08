@@ -31,7 +31,7 @@ const runMigrations = async () => {
         // Get all migration files
         const migrationsDir = __dirname;
         const migrationFiles = fs.readdirSync(migrationsDir)
-            .filter(file => file.endsWith('.js') && file !== 'migrate.js')
+            .filter(file => file.endsWith('.js') && file !== 'migrate.js' && file !== 'rollback.js')
             .sort();
 
         console.log(`Found ${migrationFiles.length} migration file(s)`);

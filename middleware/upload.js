@@ -2,21 +2,37 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Ensure upload directory exists
-const uploadDir = 'public/uploads/categories';
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
+// Ensure upload directories exist
+const uploadDirs = {
+    categories: 'public/uploads/categories',
+    places: 'public/uploads/places'
+};
 
-// Configure storage
-const storage = multer.diskStorage({
+Object.values(uploadDirs).forEach(dir => {
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+    }
+});
+
+// Configure storage for categories
+const categoryStorage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, uploadDir);
+        cb(null, uploadDirs.categories);
     },
     filename: function (req, file, cb) {
-        // Generate unique filename: category-timestamp-randomnumber.ext
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
         cb(null, 'category-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+// Configure storage for places
+const placeStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, uploadDirs.places);
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, 'place-' + uniqueSuffix + path.extname(file.originalname));
     }
 });
 
@@ -33,14 +49,32 @@ const fileFilter = (req, file, cb) => {
     }
 };
 
-// Configure multer
-const upload = multer({
-    storage: storage,
+// Configure multer for categories
+const categoryUpload = multer({
+    storage: categoryStorage,
     limits: {
         fileSize: 5 * 1024 * 1024 // 5MB max file size
     },
     fileFilter: fileFilter
 });
 
-module.exports = upload;
+// Configure multer for places (multiple images)
+const placeUpload = multer({
+    storage: placeStorage,
+    limits: {
+        fileSize: 10 * 1024 * 1024 // 10MB max file size per image
+    },
+    fileFilter: fileFilter
+});
+
+module.exports = {
+    // For backward compatibility
+    single: categoryUpload.single.bind(categoryUpload),
+    
+    // Category uploads
+    categoryUpload,
+    
+    // Place uploads
+    placeUpload
+};
 
