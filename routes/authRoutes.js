@@ -180,11 +180,6 @@ router.post('/bookings', protect, placeBookingController.createBooking);
 // @access  Private (requires authentication)
 router.get('/bookings', protect, placeBookingController.getAllBookings);
 
-// @route   GET /api/auth/bookings/upcoming/list
-// @desc    Get upcoming bookings
-// @access  Private (requires authentication)
-router.get('/bookings/upcoming/list', protect, placeBookingController.getUpcomingBookings);
-
 // @route   GET /api/auth/bookings/history/list
 // @desc    Get booking history (past bookings)
 // @access  Private (requires authentication)
