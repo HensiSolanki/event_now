@@ -2,6 +2,7 @@ const Place = require('../../models/PlaceModel');
 const PlaceImage = require('../../models/PlaceImageModel');
 const PlaceRating = require('../../models/PlaceRatingModel');
 const PlaceCategory = require('../../models/PlaceCategoryModel');
+const PlaceOffer = require('../../models/PlaceOfferModel');
 const User = require('../../models/UserModel');
 const FavoritePlace = require('../../models/FavoritePlaceModel');
 const sequelize = require('../../config/database');
@@ -82,6 +83,18 @@ const placeController = {
                         attributes: ['id', 'image_path', 'caption', 'is_primary', 'sort_order'],
                         separate: true,
                         order: [['is_primary', 'DESC'], ['sort_order', 'ASC']]
+                    },
+                    {
+                        model: PlaceOffer,
+                        as: 'offers',
+                        attributes: ['id', 'title', 'description', 'discount_type', 'discount_value', 'valid_from', 'valid_until', 'code', 'is_active', 'terms_and_conditions'],
+                        separate: true,
+                        where: {
+                            is_active: true,
+                            valid_until: { [Op.gte]: sequelize.literal('CURRENT_DATE') }
+                        },
+                        required: false,
+                        order: [['created_at', 'DESC']]
                     }
                 ],
                 order: [[sortField, sortDirection]],
@@ -137,6 +150,7 @@ const placeController = {
     getPlaceById: async (req, res) => {
         try {
             const { id } = req.params;
+            const { Op } = require('sequelize');
             
             const place = await Place.findByPk(id, {
                 include: [
@@ -165,6 +179,17 @@ const placeController = {
                         ],
                         order: [['created_at', 'DESC']],
                         limit: 10 // Get latest 10 reviews
+                    },
+                    {
+                        model: PlaceOffer,
+                        as: 'offers',
+                        attributes: ['id', 'title', 'description', 'discount_type', 'discount_value', 'valid_from', 'valid_until', 'code', 'is_active', 'terms_and_conditions', 'minimum_booking_amount'],
+                        where: {
+                            is_active: true,
+                            valid_until: { [Op.gte]: sequelize.literal('CURRENT_DATE') }
+                        },
+                        required: false,
+                        order: [['created_at', 'DESC']]
                     },
                     {
                         model: User,

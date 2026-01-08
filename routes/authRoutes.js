@@ -4,6 +4,7 @@ const authController = require('../controllers/api/authController');
 const placeCategoryController = require('../controllers/api/placeCategoryController');
 const placeController = require('../controllers/api/placeController');
 const placeBookingController = require('../controllers/api/placeBookingController');
+const placeOfferController = require('../controllers/api/placeOfferController');
 const { protect, optionalAuth } = require('../middleware/authMiddleware');
 const { categoryUpload, placeUpload } = require('../middleware/upload');
 
@@ -199,6 +200,46 @@ router.put('/bookings/:id', protect, placeBookingController.updateBooking);
 // @desc    Cancel booking
 // @access  Private (requires authentication)
 router.patch('/bookings/:id/cancel', protect, placeBookingController.cancelBooking);
+
+/**
+ * Place Offer Routes
+ * Base URL: /api/auth/places/:placeId/offers and /api/auth/offers
+ */
+
+// @route   POST /api/auth/places/:placeId/offers
+// @desc    Add a new offer for a place
+// @access  Public (can be protected with 'protect' middleware if needed)
+router.post('/places/:placeId/offers', placeOfferController.addOffer);
+
+// @route   GET /api/auth/places/:placeId/offers
+// @desc    Get all offers for a place
+// @access  Public
+router.get('/places/:placeId/offers', placeOfferController.getPlaceOffers);
+
+// @route   GET /api/auth/offers/:id
+// @desc    Get offer by ID
+// @access  Public
+router.get('/offers/:id', placeOfferController.getOfferById);
+
+// @route   PUT /api/auth/offers/:id
+// @desc    Update offer
+// @access  Public (can be protected with 'protect' middleware if needed)
+router.put('/offers/:id', placeOfferController.updateOffer);
+
+// @route   DELETE /api/auth/offers/:id
+// @desc    Delete offer
+// @access  Public (can be protected with 'protect' middleware if needed)
+router.delete('/offers/:id', placeOfferController.deleteOffer);
+
+// @route   PATCH /api/auth/offers/:id/toggle-active
+// @desc    Toggle offer active status
+// @access  Public (can be protected with 'protect' middleware if needed)
+router.patch('/offers/:id/toggle-active', placeOfferController.toggleOfferStatus);
+
+// @route   GET /api/auth/offers/validate/:code
+// @desc    Validate and get offer by code
+// @access  Public
+router.get('/offers/validate/:code', placeOfferController.validateOfferCode);
 
 module.exports = router;
 

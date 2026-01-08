@@ -32,10 +32,10 @@ const placeBookingController = {
             } = req.body;
 
             // Validate required fields
-            if (!place_id || !booking_date || !full_name || !email || !phone) {
+            if (!place_id || !booking_date || !full_name || !email) {
                 return res.status(400).json({
                     success: false,
-                    message: 'Place, booking date, full name, email, and phone are required'
+                    message: 'Place, booking date, full name, and email are required'
                 });
             }
 
@@ -76,7 +76,7 @@ const placeBookingController = {
                 number_of_guests: number_of_guests || 1,
                 full_name,
                 email,
-                phone,
+                phone: phone || null,
                 special_requests: special_requests || null,
                 total_amount: total_amount || 0.00,
                 booking_status: 'pending',
@@ -205,7 +205,7 @@ const placeBookingController = {
                         ]
                     }
                 ],
-                order: [['booking_date', 'DESC'], ['created_at', 'DESC']],
+                order: [['created_at', 'DESC'], ['booking_date', 'DESC']],
                 limit: parseInt(limit),
                 offset: offset
             });
