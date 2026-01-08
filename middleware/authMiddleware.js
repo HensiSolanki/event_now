@@ -62,5 +62,47 @@ const protect = async (req, res, next) => {
     }
 };
 
-module.exports = { protect };
+/**
+ * Optional authentication middleware
+ * Attempts to authenticate user but doesn't fail if no token provided
+ * Useful for endpoints that work for both authenticated and non-authenticated users
+ */
+const optionalAuth = async (req, res, next) => {
+    try {
+        let token;
+
+        // Check if token exists in Authorization header
+        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+            token = req.headers.authorization.split(' ')[1];
+        }
+
+        // If no token found, continue without authentication
+        if (!token) {
+            req.user = null;
+            return next();
+        }
+
+        // Verify token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        // Check if user still exists
+        const currentUser = await User.findByPk(decoded.id);
+
+        if (!currentUser) {
+            req.user = null;
+            return next();
+        }
+
+        // Attach user to request
+        req.user = currentUser;
+        next();
+    } catch (error) {
+        // If any error occurs, just continue without authentication
+        console.error('Optional auth error:', error);
+        req.user = null;
+        next();
+    }
+};
+
+module.exports = { protect, optionalAuth };
 

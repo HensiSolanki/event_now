@@ -89,13 +89,36 @@ const placeController = {
                 offset: offset
             });
 
+            let placesWithFavorite = places;
+            if (req.user) {
+                const userFavorites = await FavoritePlace.findAll({
+                    where: { user_id: req.user.id },
+                    attributes: ['place_id'],
+                    raw: true
+                });
+                
+                const favoritePlaceIds = new Set(userFavorites.map(fav => fav.place_id));
+                
+                placesWithFavorite = places.map(place => {
+                    const placeData = place.toJSON();
+                    placeData.isFavorite = favoritePlaceIds.has(place.id);
+                    return placeData;
+                });
+            } else {
+                placesWithFavorite = places.map(place => {
+                    const placeData = place.toJSON();
+                    placeData.isFavorite = false;
+                    return placeData;
+                });
+            }
+
             res.status(200).json({
                 success: true,
-                count: places.length,
+                count: placesWithFavorite.length,
                 total: count,
                 page: parseInt(page),
                 totalPages: Math.ceil(count / parseInt(limit)),
-                data: places
+                data: placesWithFavorite
             });
         } catch (error) {
             console.error('Error fetching places:', error);
@@ -164,11 +187,18 @@ const placeController = {
             // Get rating distribution
             const ratingDistribution = await PlaceRating.getRatingDistribution(id);
 
+            // Check if place is favorited by current user
+            let isFavorite = false;
+            if (req.user) {
+                isFavorite = await FavoritePlace.isFavorited(req.user.id, id);
+            }
+
             res.status(200).json({
                 success: true,
                 data: {
                     ...place.toJSON(),
-                    rating_distribution: ratingDistribution
+                    rating_distribution: ratingDistribution,
+                    isFavorite: isFavorite
                 }
             });
         } catch (error) {

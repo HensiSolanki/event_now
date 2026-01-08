@@ -4,7 +4,7 @@ const authController = require('../controllers/api/authController');
 const placeCategoryController = require('../controllers/api/placeCategoryController');
 const placeController = require('../controllers/api/placeController');
 const placeBookingController = require('../controllers/api/placeBookingController');
-const { protect } = require('../middleware/authMiddleware');
+const { protect, optionalAuth } = require('../middleware/authMiddleware');
 const { categoryUpload, placeUpload } = require('../middleware/upload');
 
 /**
@@ -77,13 +77,13 @@ router.delete('/place-categories/:id', placeCategoryController.deleteCategory);
 
 // @route   GET /api/auth/places
 // @desc    Get all places (with filtering and pagination)
-// @access  Public
-router.get('/places', placeController.getAllPlaces);
+// @access  Public (includes isFavorite flag if authenticated)
+router.get('/places', optionalAuth, placeController.getAllPlaces);
 
 // @route   GET /api/auth/places/:id
 // @desc    Get place by ID with details
-// @access  Public
-router.get('/places/:id', placeController.getPlaceById);
+// @access  Public (includes isFavorite flag if authenticated)
+router.get('/places/:id', optionalAuth, placeController.getPlaceById);
 
 // @route   POST /api/auth/places
 // @desc    Create new place (with multiple images)
