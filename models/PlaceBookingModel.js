@@ -75,12 +75,7 @@ const PlaceBooking = sequelize.define('PlaceBooking', {
     },
     phone: {
         type: DataTypes.STRING(20),
-        allowNull: false,
-        validate: {
-            notEmpty: {
-                msg: 'Phone number is required'
-            }
-        }
+        allowNull: true
     },
     special_requests: {
         type: DataTypes.TEXT,
