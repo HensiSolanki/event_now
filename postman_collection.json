@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Event Now - Complete API",
-    "description": "Complete API collection for Event Now application including Authentication, Place Categories, Places, Ratings, Favorites, and Bookings",
+    "description": "Complete API collection for Event Now application including Authentication, Place Categories, Places, Ratings, Favorites, Bookings, Offers, and Activities (Upcoming & Live Events with Automatic Scheduler)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -33,6 +33,16 @@
     {
       "key": "booking_reference",
       "value": "",
+      "type": "string"
+    },
+    {
+      "key": "offer_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "activity_id",
+      "value": "1",
       "type": "string"
     }
   ],
@@ -1626,6 +1636,759 @@
               ]
             },
             "description": "Get all bookings for a specific place made by the authenticated user"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Place Offers",
+      "item": [
+        {
+          "name": "Add Offer to Place",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Summer Special 2025\",\n    \"description\": \"Get 20% off on all bookings this summer!\",\n    \"discount_type\": \"percentage\",\n    \"discount_value\": 20.00,\n    \"valid_from\": \"2025-06-01\",\n    \"valid_until\": \"2025-08-31\",\n    \"terms_and_conditions\": \"Valid only on weekdays. Cannot be combined with other offers.\",\n    \"is_active\": true,\n    \"usage_limit\": 100,\n    \"minimum_booking_amount\": 50.00,\n    \"code\": \"SUMMER20\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}/offers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}", "offers"]
+            },
+            "description": "Create a new promotional offer for a specific place. Code will be auto-generated if not provided."
+          },
+          "response": []
+        },
+        {
+          "name": "Add Offer - Fixed Discount",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Winter Discount\",\n    \"description\": \"Fixed $25 off on your booking\",\n    \"discount_type\": \"fixed\",\n    \"discount_value\": 25.00,\n    \"valid_from\": \"2025-12-01\",\n    \"valid_until\": \"2026-02-28\",\n    \"is_active\": true,\n    \"code\": \"WINTER25\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}/offers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}", "offers"]
+            },
+            "description": "Create an offer with fixed discount amount"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Offer - Without Code",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Weekend Special\",\n    \"description\": \"Special offer for weekend bookings\",\n    \"discount_type\": \"percentage\",\n    \"discount_value\": 15.00,\n    \"valid_from\": \"2025-01-01\",\n    \"valid_until\": \"2025-12-31\",\n    \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}/offers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}", "offers"]
+            },
+            "description": "Create an offer without providing a promo code (will be auto-generated)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Offers for Place",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}/offers?active_only=true&include_expired=false",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}", "offers"],
+              "query": [
+                {
+                  "key": "active_only",
+                  "value": "true",
+                  "description": "Filter only active offers (default: false)"
+                },
+                {
+                  "key": "include_expired",
+                  "value": "false",
+                  "description": "Include expired offers (default: false)"
+                }
+              ]
+            },
+            "description": "Get all offers for a specific place with optional filtering by active status and expiration"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Offer by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/offers/{{offer_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "offers", "{{offer_id}}"]
+            },
+            "description": "Get detailed information about a specific offer including the associated place details"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Offer",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Updated Summer Special\",\n    \"discount_value\": 25.00,\n    \"description\": \"Updated description - Now 25% off!\",\n    \"terms_and_conditions\": \"Updated terms and conditions\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/offers/{{offer_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "offers", "{{offer_id}}"]
+            },
+            "description": "Update an existing offer. All fields are optional - only provided fields will be updated."
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Offer Active Status",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/offers/{{offer_id}}/toggle-active",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "offers", "{{offer_id}}", "toggle-active"]
+            },
+            "description": "Toggle the active/inactive status of an offer. Activates if inactive, deactivates if active."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Offer",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/offers/{{offer_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "offers", "{{offer_id}}"]
+            },
+            "description": "Permanently delete an offer from the database"
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Offer Code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/offers/validate/SUMMER20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "offers", "validate", "SUMMER20"]
+            },
+            "description": "Validate an offer code without any additional parameters. Returns offer details if valid."
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Offer Code with Place",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/offers/validate/SUMMER20?place_id={{place_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "offers", "validate", "SUMMER20"],
+              "query": [
+                {
+                  "key": "place_id",
+                  "value": "{{place_id}}",
+                  "description": "Verify offer is valid for this specific place"
+                }
+              ]
+            },
+            "description": "Validate an offer code and check if it belongs to a specific place"
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Offer Code with Amount",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/offers/validate/SUMMER20?place_id={{place_id}}&booking_amount=100.00",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "offers", "validate", "SUMMER20"],
+              "query": [
+                {
+                  "key": "place_id",
+                  "value": "{{place_id}}",
+                  "description": "Verify offer is valid for this place"
+                },
+                {
+                  "key": "booking_amount",
+                  "value": "100.00",
+                  "description": "Check if booking amount meets minimum requirement"
+                }
+              ]
+            },
+            "description": "Validate an offer code with place ID and booking amount to verify all requirements are met"
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Invalid Code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/offers/validate/INVALID123",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "offers", "validate", "INVALID123"]
+            },
+            "description": "Test validation with an invalid code - should return error message"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Activities",
+      "item": [
+        {
+          "name": "Create Activity",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"place_id\": {{place_id}},\n    \"title\": \"Live DJ Night\",\n    \"description\": \"Amazing DJ performance with live music\",\n    \"activity_type\": \"dj\",\n    \"location\": \"Main Hall\",\n    \"start_date\": \"2025-02-20T22:00:00\",\n    \"end_date\": \"2025-02-21T03:00:00\",\n    \"entry_fee\": 500.00,\n    \"is_free\": false,\n    \"max_participants\": 200,\n    \"contact_phone\": \"+1234567890\",\n    \"contact_email\": \"events@example.com\",\n    \"organizer_name\": \"Event Organizers Inc.\",\n    \"tags\": [\"music\", \"night\", \"dj\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/activities",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "activities"]
+            },
+            "description": "Create a new activity (place-based). Status will be 'upcoming' by default. Place_id is optional - set to null for standalone activities."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Standalone Activity",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"City Marathon 2025\",\n    \"description\": \"Annual city marathon event\",\n    \"activity_type\": \"sports\",\n    \"location\": \"City Center, Downtown\",\n    \"latitude\": 23.0225,\n    \"longitude\": 72.5714,\n    \"start_date\": \"2025-03-10T06:00:00\",\n    \"end_date\": \"2025-03-10T12:00:00\",\n    \"is_free\": true,\n    \"max_participants\": 5000,\n    \"tags\": [\"sports\", \"marathon\", \"fitness\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/activities",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "activities"]
+            },
+            "description": "Create a standalone activity not associated with any place. Omit place_id field."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Activities",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/activities?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "activities"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number for pagination"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Number of items per page"
+                },
+                {
+                  "key": "status",
+                  "value": "upcoming",
+                  "disabled": true,
+                  "description": "Filter by status: upcoming, live, completed, cancelled"
+                },
+                {
+                  "key": "activity_type",
+                  "value": "music",
+                  "disabled": true,
+                  "description": "Filter by type: sports, music, club, dj, event, festival, workshop, other"
+                },
+                {
+                  "key": "place_id",
+                  "value": "{{place_id}}",
+                  "disabled": true,
+                  "description": "Filter by specific place"
+                },
+                {
+                  "key": "is_featured",
+                  "value": "true",
+                  "disabled": true,
+                  "description": "Filter featured activities"
+                },
+                {
+                  "key": "date_from",
+                  "value": "2025-01-15",
+                  "disabled": true,
+                  "description": "Filter from date (YYYY-MM-DD)"
+                },
+                {
+                  "key": "date_to",
+                  "value": "2025-01-31",
+                  "disabled": true,
+                  "description": "Filter to date (YYYY-MM-DD)"
+                }
+              ]
+            },
+            "description": "Get all activities with filtering, sorting, and pagination support. Public endpoint - no authentication required."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Upcoming Activities",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/activities/upcoming?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "activities", "upcoming"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Items per page"
+                },
+                {
+                  "key": "activity_type",
+                  "value": "dj",
+                  "disabled": true,
+                  "description": "Filter by activity type"
+                },
+                {
+                  "key": "place_id",
+                  "value": "{{place_id}}",
+                  "disabled": true,
+                  "description": "Filter by place"
+                }
+              ]
+            },
+            "description": "Get all upcoming activities (status='upcoming' and future dates only). Public endpoint."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Live Activities",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/activities/live?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "activities", "live"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Items per page"
+                },
+                {
+                  "key": "activity_type",
+                  "value": "music",
+                  "disabled": true,
+                  "description": "Filter by activity type"
+                },
+                {
+                  "key": "place_id",
+                  "value": "{{place_id}}",
+                  "disabled": true,
+                  "description": "Filter by place"
+                }
+              ]
+            },
+            "description": "Get all currently live activities (status='live'). Public endpoint."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Activity by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/activities/{{activity_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "activities", "{{activity_id}}"]
+            },
+            "description": "Get detailed information about a specific activity including place details (if applicable). Public endpoint. View count is automatically incremented."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Activities by Place",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}/activities?status=upcoming&page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}", "activities"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "upcoming",
+                  "description": "Filter by status: upcoming, live, completed, cancelled"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Items per page"
+                }
+              ]
+            },
+            "description": "Get all activities for a specific place. Public endpoint."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Activity",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Updated Activity Title\",\n    \"description\": \"Updated description\",\n    \"entry_fee\": 600.00,\n    \"max_participants\": 250,\n    \"tags\": [\"updated\", \"music\", \"event\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/activities/{{activity_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "activities", "{{activity_id}}"]
+            },
+            "description": "Update activity details. All fields are optional. Only creator can update. Cannot update completed or cancelled activities."
+          },
+          "response": []
+        },
+        {
+          "name": "Make Activity Live",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/activities/{{activity_id}}/make-live",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "activities", "{{activity_id}}", "make-live"]
+            },
+            "description": "Change activity status from 'upcoming' to 'live'. Only creator can perform this action."
+          },
+          "response": []
+        },
+        {
+          "name": "Complete Activity",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/activities/{{activity_id}}/complete",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "activities", "{{activity_id}}", "complete"]
+            },
+            "description": "Mark activity as completed. Only creator can perform this action."
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Activity",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/activities/{{activity_id}}/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "activities", "{{activity_id}}", "cancel"]
+            },
+            "description": "Cancel an activity. Only creator can cancel. Cannot cancel completed activities."
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Featured Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/activities/{{activity_id}}/toggle-featured",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "activities", "{{activity_id}}", "toggle-featured"]
+            },
+            "description": "Toggle the featured status of an activity. Requires authentication."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Activity",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/activities/{{activity_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "activities", "{{activity_id}}"]
+            },
+            "description": "Delete an activity permanently. Only creator can delete."
+          },
+          "response": []
+        },
+        {
+          "name": "Filter by Music Activities",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/activities?activity_type=music&status=upcoming",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "activities"],
+              "query": [
+                {
+                  "key": "activity_type",
+                  "value": "music"
+                },
+                {
+                  "key": "status",
+                  "value": "upcoming"
+                }
+              ]
+            },
+            "description": "Get upcoming music activities (concerts, live bands, etc.)"
+          },
+          "response": []
+        },
+        {
+          "name": "Filter by Sports Activities",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/activities?activity_type=sports&is_free=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "activities"],
+              "query": [
+                {
+                  "key": "activity_type",
+                  "value": "sports"
+                },
+                {
+                  "key": "is_free",
+                  "value": "true"
+                }
+              ]
+            },
+            "description": "Get free sports activities"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Featured Activities",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/activities?is_featured=true&status=upcoming",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "activities"],
+              "query": [
+                {
+                  "key": "is_featured",
+                  "value": "true"
+                },
+                {
+                  "key": "status",
+                  "value": "upcoming"
+                }
+              ]
+            },
+            "description": "Get featured upcoming activities"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Activity Scheduler (Testing)",
+      "item": [
+        {
+          "name": "Check Scheduler Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/test/scheduler/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "test", "scheduler", "status"]
+            },
+            "description": "Check if the activity scheduler is running. The scheduler automatically updates activity statuses based on time (upcoming → live → completed)."
+          },
+          "response": []
+        },
+        {
+          "name": "Manually Trigger Scheduler",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/test/scheduler/trigger",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "test", "scheduler", "trigger"]
+            },
+            "description": "Manually trigger the scheduler to update activity statuses immediately (instead of waiting for the next cron run). Useful for testing. Check server console for results."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Quick Test Activity",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/test/activity/quick-test",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "test", "activity", "quick-test"]
+            },
+            "description": "Create a test activity that automatically goes LIVE in 1 minute and COMPLETES in 3 minutes. Perfect for testing the automatic scheduler. Watch server console for status change logs."
           },
           "response": []
         }

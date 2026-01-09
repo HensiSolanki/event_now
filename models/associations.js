@@ -6,6 +6,7 @@ const User = require('./UserModel');
 const FavoritePlace = require('./FavoritePlaceModel');
 const PlaceBooking = require('./PlaceBookingModel');
 const PlaceOffer = require('./PlaceOfferModel');
+const Activity = require('./ActivityModel');
 
 /**
  * Define model associations
@@ -138,6 +139,32 @@ PlaceOffer.belongsTo(Place, {
     as: 'place'
 });
 
+// Place has many Activities
+Place.hasMany(Activity, {
+    foreignKey: 'place_id',
+    as: 'activities',
+    onDelete: 'SET NULL'
+});
+
+// Activity belongs to Place (optional)
+Activity.belongsTo(Place, {
+    foreignKey: 'place_id',
+    as: 'place'
+});
+
+// User has many Activities
+User.hasMany(Activity, {
+    foreignKey: 'created_by',
+    as: 'activities',
+    onDelete: 'SET NULL'
+});
+
+// Activity belongs to User (creator)
+Activity.belongsTo(User, {
+    foreignKey: 'created_by',
+    as: 'creator'
+});
+
 module.exports = {
     Place,
     PlaceCategory,
@@ -146,6 +173,7 @@ module.exports = {
     User,
     FavoritePlace,
     PlaceBooking,
-    PlaceOffer
+    PlaceOffer,
+    Activity
 };
 

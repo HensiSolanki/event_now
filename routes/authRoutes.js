@@ -5,6 +5,8 @@ const placeCategoryController = require('../controllers/api/placeCategoryControl
 const placeController = require('../controllers/api/placeController');
 const placeBookingController = require('../controllers/api/placeBookingController');
 const placeOfferController = require('../controllers/api/placeOfferController');
+const activityController = require('../controllers/api/activityController');
+const activityScheduler = require('../services/activityScheduler');
 const { protect, optionalAuth } = require('../middleware/authMiddleware');
 const { categoryUpload, placeUpload } = require('../middleware/upload');
 
@@ -240,6 +242,156 @@ router.patch('/offers/:id/toggle-active', placeOfferController.toggleOfferStatus
 // @desc    Validate and get offer by code
 // @access  Public
 router.get('/offers/validate/:code', placeOfferController.validateOfferCode);
+
+/**
+ * Activity Routes
+ * Base URL: /api/auth/activities
+ */
+
+// @route   POST /api/auth/activities
+// @desc    Create a new activity
+// @access  Private (requires authentication)
+router.post('/activities', protect, activityController.createActivity);
+
+// @route   GET /api/auth/activities
+// @desc    Get all activities (with filters and pagination)
+// @access  Public
+router.get('/activities', activityController.getAllActivities);
+
+// @route   GET /api/auth/activities/upcoming
+// @desc    Get upcoming activities
+// @access  Public
+router.get('/activities/upcoming', activityController.getUpcomingActivities);
+
+// @route   GET /api/auth/activities/live
+// @desc    Get live activities
+// @access  Public
+router.get('/activities/live', activityController.getLiveActivities);
+
+// @route   GET /api/auth/activities/:id
+// @desc    Get activity by ID
+// @access  Public
+router.get('/activities/:id', activityController.getActivityById);
+
+// @route   PUT /api/auth/activities/:id
+// @desc    Update activity
+// @access  Private (requires authentication)
+router.put('/activities/:id', protect, activityController.updateActivity);
+
+// @route   DELETE /api/auth/activities/:id
+// @desc    Delete activity
+// @access  Private (requires authentication)
+router.delete('/activities/:id', protect, activityController.deleteActivity);
+
+// @route   PATCH /api/auth/activities/:id/make-live
+// @desc    Make activity live (change status from upcoming to live)
+// @access  Private (requires authentication)
+router.patch('/activities/:id/make-live', protect, activityController.makeLive);
+
+// @route   PATCH /api/auth/activities/:id/complete
+// @desc    Mark activity as completed
+// @access  Private (requires authentication)
+router.patch('/activities/:id/complete', protect, activityController.completeActivity);
+
+// @route   PATCH /api/auth/activities/:id/cancel
+// @desc    Cancel activity
+// @access  Private (requires authentication)
+router.patch('/activities/:id/cancel', protect, activityController.cancelActivity);
+
+// @route   PATCH /api/auth/activities/:id/toggle-featured
+// @desc    Toggle activity featured status
+// @access  Private (requires authentication)
+router.patch('/activities/:id/toggle-featured', protect, activityController.toggleFeatured);
+
+// @route   GET /api/auth/places/:placeId/activities
+// @desc    Get all activities for a specific place
+// @access  Public
+router.get('/places/:placeId/activities', activityController.getActivitiesByPlace);
+
+/**
+ * Test/Debug Routes for Activity Scheduler
+ * These endpoints help test the automatic scheduler
+ */
+
+// @route   GET /api/auth/test/scheduler/status
+// @desc    Check if scheduler is running
+// @access  Public (for testing)
+router.get('/test/scheduler/status', (req, res) => {
+    const status = activityScheduler.getStatus();
+    res.json({
+        success: true,
+        scheduler: status,
+        message: status.isRunning ? 'Scheduler is running' : 'Scheduler is not running'
+    });
+});
+
+// @route   POST /api/auth/test/scheduler/trigger
+// @desc    Manually trigger scheduler (for testing without waiting)
+// @access  Public (for testing)
+router.post('/test/scheduler/trigger', async (req, res) => {
+    try {
+        await activityScheduler.triggerManually();
+        res.json({
+            success: true,
+            message: 'Scheduler triggered manually. Check console logs for results.'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error triggering scheduler',
+            error: error.message
+        });
+    }
+});
+
+// @route   POST /api/auth/test/activity/quick-test
+// @desc    Create a test activity that goes live in 1 minute (for quick testing)
+// @access  Private (requires authentication)
+router.post('/test/activity/quick-test', protect, async (req, res) => {
+    try {
+        const Activity = require('../models/ActivityModel');
+        
+        // Create activity that starts in 1 minute and ends in 3 minutes
+        const now = new Date();
+        const startDate = new Date(now.getTime() + 1 * 60000); // +1 minute
+        const endDate = new Date(now.getTime() + 3 * 60000);   // +3 minutes
+        
+        const activity = await Activity.create({
+            title: `Quick Test Activity - ${now.toLocaleTimeString()}`,
+            description: 'Auto-generated test activity for scheduler testing',
+            activity_type: 'event',
+            status: 'upcoming',
+            start_date: startDate,
+            end_date: endDate,
+            is_free: true,
+            is_active: true,
+            created_by: req.user.id
+        });
+        
+        res.status(201).json({
+            success: true,
+            message: 'Test activity created!',
+            data: activity,
+            testing: {
+                currentTime: now.toISOString(),
+                goesLiveAt: startDate.toISOString(),
+                completesAt: endDate.toISOString(),
+                instructions: [
+                    '1. Wait 1 minute for activity to go LIVE',
+                    '2. Wait 3 minutes for activity to COMPLETE',
+                    '3. Watch console logs for scheduler updates',
+                    '4. Or call POST /api/auth/test/scheduler/trigger to test immediately'
+                ]
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error creating test activity',
+            error: error.message
+        });
+    }
+});
 
 module.exports = router;
 

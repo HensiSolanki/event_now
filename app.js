@@ -13,6 +13,9 @@ var apiAuthRouter = require('./routes/authRoutes');
 var user = require("./models/UserModel");
 var associations = require("./models/associations");
 const { Place, PlaceCategory, PlaceImage, PlaceRating } = associations;
+
+// Import activity scheduler
+const activityScheduler = require('./services/activityScheduler');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
@@ -31,6 +34,12 @@ sequelize.authenticate()
     })
     .then(() => {
         console.log("Database synced successfully!");
+        
+        // Start activity scheduler
+        // Automatically updates activity statuses based on time
+        // - Changes 'upcoming' to 'live' when start_date is reached
+        // - Changes 'live' to 'completed' when end_date is reached
+        activityScheduler.start();
     })
     .catch((err) => {
         console.error("Unable to connect to the database:", err);
