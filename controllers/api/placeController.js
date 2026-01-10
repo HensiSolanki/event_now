@@ -1128,6 +1128,79 @@ const placeController = {
                 error: error.message
             });
         }
+    },
+
+    /**
+     * Update place crowded percentage
+     * PATCH /api/places/:id/crowded-percentage
+     * @access Public (can be protected with 'protect' middleware if needed)
+     */
+    updateCrowdedPercentage: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { crowded_percentage } = req.body;
+
+            // Validate crowded_percentage
+            if (crowded_percentage === undefined || crowded_percentage === null) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'crowded_percentage is required'
+                });
+            }
+
+            const crowdedValue = parseInt(crowded_percentage);
+            
+            if (isNaN(crowdedValue) || crowdedValue < 0 || crowdedValue > 100) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'crowded_percentage must be a number between 0 and 100'
+                });
+            }
+
+            // Find the place
+            const place = await Place.findByPk(id);
+
+            if (!place) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Place not found'
+                });
+            }
+
+            // Update crowded_percentage
+            place.crowded_percentage = crowdedValue;
+            await place.save();
+
+            res.status(200).json({
+                success: true,
+                message: 'Crowded percentage updated successfully',
+                data: {
+                    id: place.id,
+                    name: place.name,
+                    crowded_percentage: place.crowded_percentage
+                }
+            });
+        } catch (error) {
+            console.error('Error updating crowded percentage:', error);
+            
+            // Handle validation errors
+            if (error.name === 'SequelizeValidationError') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Validation error',
+                    errors: error.errors.map(e => ({
+                        field: e.path,
+                        message: e.message
+                    }))
+                });
+            }
+
+            res.status(500).json({
+                success: false,
+                message: 'Error updating crowded percentage',
+                error: error.message
+            });
+        }
     }
 };
 

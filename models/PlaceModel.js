@@ -132,6 +132,15 @@ const Place = sequelize.define('Place', {
         allowNull: false,
         defaultValue: 0
     },
+    crowded_percentage: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 0,
+        validate: {
+            min: 0,
+            max: 100
+        }
+    },
     created_by: {
         type: DataTypes.INTEGER,
         allowNull: true
@@ -267,4 +276,5 @@ Place.searchPlaces = async function (searchTerm, options = {}) {
 };
 
 module.exports = Place;
+
 

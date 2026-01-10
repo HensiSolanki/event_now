@@ -123,6 +123,11 @@ router.delete('/places/:placeId/images/:imageId', placeController.deletePlaceIma
 // @access  Public (can be protected with 'protect' middleware if needed)
 router.patch('/places/:placeId/images/:imageId/set-primary', placeController.setPrimaryImage);
 
+// @route   PATCH /api/auth/places/:id/crowded-percentage
+// @desc    Update place crowded percentage
+// @access  Public (can be protected with 'protect' middleware if needed)
+router.patch('/places/:id/crowded-percentage', placeController.updateCrowdedPercentage);
+
 /**
  * Place Rating Routes
  * Base URL: /api/auth/places/:id/ratings

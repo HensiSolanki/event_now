@@ -1013,6 +1013,29 @@
             "description": "Get only featured places"
           },
           "response": []
+        },
+        {
+          "name": "Update Crowded Percentage",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"crowded_percentage\": 75\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/places/{{place_id}}/crowded-percentage",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "places", "{{place_id}}", "crowded-percentage"]
+            },
+            "description": "Update the crowded percentage (0-100) for a place. This indicates how crowded the place currently is."
+          },
+          "response": []
         }
       ]
     },
