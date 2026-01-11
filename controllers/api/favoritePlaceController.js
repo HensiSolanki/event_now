@@ -2,6 +2,7 @@ const FavoritePlace = require('../../models/FavoritePlaceModel');
 const Place = require('../../models/PlaceModel');
 const PlaceCategory = require('../../models/PlaceCategoryModel');
 const PlaceImage = require('../../models/PlaceImageModel');
+const PlaceOffer = require('../../models/PlaceOfferModel');
 
 /**
  * Favorite Place Controller
@@ -121,6 +122,26 @@ const favoritePlaceController = {
                                 where: { is_primary: true },
                                 required: false,
                                 limit: 1
+                            },
+                            {
+                                model: PlaceOffer,
+                                as: 'offers',
+                                attributes: [
+                                    'id',
+                                    'title',
+                                    'description',
+                                    'discount_type',
+                                    'discount_value',
+                                    'valid_from',
+                                    'valid_until',
+                                    'terms_and_conditions',
+                                    'is_active',
+                                    'usage_limit',
+                                    'used_count',
+                                    'minimum_booking_amount',
+                                    'code'
+                                ],
+                                required: false
                             }
                         ]
                     }

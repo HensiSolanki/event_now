@@ -8,7 +8,7 @@ const placeOfferController = require('../controllers/api/placeOfferController');
 const activityController = require('../controllers/api/activityController');
 const activityScheduler = require('../services/activityScheduler');
 const { protect, optionalAuth } = require('../middleware/authMiddleware');
-const { categoryUpload, placeUpload } = require('../middleware/upload');
+const { categoryUpload, placeUpload, activityUpload } = require('../middleware/upload');
 
 /**
  * Authentication Routes
@@ -254,9 +254,9 @@ router.get('/offers/validate/:code', placeOfferController.validateOfferCode);
  */
 
 // @route   POST /api/auth/activities
-// @desc    Create a new activity
+// @desc    Create a new activity (with optional image upload)
 // @access  Private (requires authentication)
-router.post('/activities', protect, activityController.createActivity);
+router.post('/activities', protect, activityUpload.single('image'), activityController.createActivity);
 
 // @route   GET /api/auth/activities
 // @desc    Get all activities (with filters and pagination)

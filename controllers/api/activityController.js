@@ -68,6 +68,12 @@ const activityController = {
                 });
             }
 
+            // Handle image upload if provided
+            let imagePath = null;
+            if (req.file) {
+                imagePath = `uploads/activities/${req.file.filename}`;
+            }
+
             // Create activity
             const activity = await Activity.create({
                 place_id: place_id || null,
@@ -80,6 +86,7 @@ const activityController = {
                 longitude: longitude || null,
                 start_date,
                 end_date: end_date || null,
+                image_path: imagePath,
                 entry_fee: entry_fee || 0.00,
                 is_free: is_free !== undefined ? is_free : true,
                 max_participants: max_participants || null,
@@ -254,9 +261,7 @@ const activityController = {
         try {
             const {
                 place_id,
-                activity_type,
-                page = 1,
-                limit = 20
+                activity_type
             } = req.query;
 
             const where = { 
@@ -275,9 +280,7 @@ const activityController = {
                 where.activity_type = activity_type;
             }
 
-            const offset = (parseInt(page) - 1) * parseInt(limit);
-
-            const { count, rows: activities } = await Activity.findAndCountAll({
+            const activities = await Activity.findAll({
                 where,
                 include: [
                     {
@@ -302,17 +305,12 @@ const activityController = {
                         ]
                     }
                 ],
-                order: [['start_date', 'ASC']],
-                limit: parseInt(limit),
-                offset: offset
+                order: [['start_date', 'ASC']]
             });
 
             res.status(200).json({
                 success: true,
                 count: activities.length,
-                total: count,
-                page: parseInt(page),
-                totalPages: Math.ceil(count / parseInt(limit)),
                 data: activities
             });
         } catch (error) {
@@ -334,9 +332,7 @@ const activityController = {
         try {
             const {
                 place_id,
-                activity_type,
-                page = 1,
-                limit = 20
+                activity_type
             } = req.query;
 
             const where = { 
@@ -352,9 +348,7 @@ const activityController = {
                 where.activity_type = activity_type;
             }
 
-            const offset = (parseInt(page) - 1) * parseInt(limit);
-
-            const { count, rows: activities } = await Activity.findAndCountAll({
+            const activities = await Activity.findAll({
                 where,
                 include: [
                     {
@@ -379,17 +373,12 @@ const activityController = {
                         ]
                     }
                 ],
-                order: [['start_date', 'DESC'], ['view_count', 'DESC']],
-                limit: parseInt(limit),
-                offset: offset
+                order: [['start_date', 'DESC'], ['view_count', 'DESC']]
             });
 
             res.status(200).json({
                 success: true,
                 count: activities.length,
-                total: count,
-                page: parseInt(page),
-                totalPages: Math.ceil(count / parseInt(limit)),
                 data: activities
             });
         } catch (error) {

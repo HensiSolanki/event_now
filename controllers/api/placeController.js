@@ -1006,6 +1006,26 @@ const placeController = {
                                 where: { is_primary: true },
                                 required: false,
                                 limit: 1
+                            },
+                            {
+                                model: PlaceOffer,
+                                as: 'offers',
+                                attributes: [
+                                    'id',
+                                    'title',
+                                    'description',
+                                    'discount_type',
+                                    'discount_value',
+                                    'valid_from',
+                                    'valid_until',
+                                    'terms_and_conditions',
+                                    'is_active',
+                                    'usage_limit',
+                                    'used_count',
+                                    'minimum_booking_amount',
+                                    'code'
+                                ],
+                                required: false
                             }
                         ]
                     }
@@ -1021,11 +1041,17 @@ const placeController = {
                 total: count,
                 page: parseInt(page),
                 totalPages: Math.ceil(count / parseInt(limit)),
-                data: favorites.map(fav => ({
-                    favorite_id: fav.id,
-                    added_at: fav.created_at,
-                    place: fav.place
-                }))
+                data: favorites.map(fav => {
+                    const placeData = fav.place.toJSON();
+                    return {
+                        favorite_id: fav.id,
+                        added_at: fav.created_at,
+                        place: {
+                            ...placeData,
+                            isFavorite: true
+                        }
+                    };
+                })
             });
         } catch (error) {
             console.error('Error fetching favorites:', error);

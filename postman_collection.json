@@ -1942,6 +1942,134 @@
           "response": []
         },
         {
+          "name": "Create Activity with Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": [],
+                  "description": "Activity banner/poster image (optional, jpeg/jpg/png/gif/webp/svg, max 10MB)"
+                },
+                {
+                  "key": "place_id",
+                  "value": "{{place_id}}",
+                  "type": "text",
+                  "description": "Optional - Place ID if activity is associated with a place"
+                },
+                {
+                  "key": "title",
+                  "value": "Summer Music Festival",
+                  "type": "text",
+                  "description": "Required - Activity title"
+                },
+                {
+                  "key": "description",
+                  "value": "Join us for an amazing summer music festival with live performances",
+                  "type": "text",
+                  "description": "Optional - Activity description"
+                },
+                {
+                  "key": "activity_type",
+                  "value": "festival",
+                  "type": "text",
+                  "description": "Optional - Type: sports, music, club, dj, event, festival, workshop, other"
+                },
+                {
+                  "key": "location",
+                  "value": "Central Park",
+                  "type": "text",
+                  "description": "Optional - Activity location"
+                },
+                {
+                  "key": "latitude",
+                  "value": "23.0225",
+                  "type": "text",
+                  "description": "Optional - Latitude coordinate"
+                },
+                {
+                  "key": "longitude",
+                  "value": "72.5714",
+                  "type": "text",
+                  "description": "Optional - Longitude coordinate"
+                },
+                {
+                  "key": "start_date",
+                  "value": "2026-07-15T18:00:00",
+                  "type": "text",
+                  "description": "Required - Activity start date and time (ISO format)"
+                },
+                {
+                  "key": "end_date",
+                  "value": "2026-07-15T23:00:00",
+                  "type": "text",
+                  "description": "Optional - Activity end date and time"
+                },
+                {
+                  "key": "entry_fee",
+                  "value": "1500.00",
+                  "type": "text",
+                  "description": "Optional - Entry fee amount"
+                },
+                {
+                  "key": "is_free",
+                  "value": "false",
+                  "type": "text",
+                  "description": "Optional - Is the activity free? (true/false)"
+                },
+                {
+                  "key": "max_participants",
+                  "value": "1000",
+                  "type": "text",
+                  "description": "Optional - Maximum number of participants"
+                },
+                {
+                  "key": "contact_phone",
+                  "value": "+1234567890",
+                  "type": "text",
+                  "description": "Optional - Contact phone number"
+                },
+                {
+                  "key": "contact_email",
+                  "value": "info@festival.com",
+                  "type": "text",
+                  "description": "Optional - Contact email"
+                },
+                {
+                  "key": "organizer_name",
+                  "value": "Festival Organizers Ltd.",
+                  "type": "text",
+                  "description": "Optional - Organizer name"
+                },
+                {
+                  "key": "tags",
+                  "value": "[\"music\", \"festival\", \"outdoor\", \"summer\"]",
+                  "type": "text",
+                  "description": "Optional - Tags as JSON array"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/activities",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "activities"]
+            },
+            "description": "Create a new activity with image upload. Use form-data to send both the image file and activity details. The image field accepts jpeg, jpg, png, gif, webp, and svg files up to 10MB."
+          },
+          "response": []
+        },
+        {
           "name": "Create Standalone Activity",
           "request": {
             "method": "POST",
