@@ -534,6 +534,209 @@ const placeBookingController = {
         }
     },
 
+    /**
+     * Accept or Cancel booking
+     * PATCH /api/auth/bookings/:id/status
+     * @access Private (requires authentication)
+     * @body { action: 'accept' | 'cancel', cancellation_reason?: string }
+     */
+    updateBookingStatus: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { action, cancellation_reason } = req.body;
+
+            // Validate action parameter
+            if (!action || !['accept', 'cancel'].includes(action)) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Invalid action. Must be either "accept" or "cancel"'
+                });
+            }
+
+            // Check if booking exists
+            const booking = await PlaceBooking.findByPk(id, {
+                include: [
+                    {
+                        model: Place,
+                        as: 'place',
+                        attributes: ['id', 'name', 'location', 'is_active']
+                    },
+                    {
+                        model: User,
+                        as: 'user',
+                        attributes: ['id', 'name', 'email']
+                    }
+                ]
+            });
+
+            if (!booking) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Booking not found'
+                });
+            }
+
+            // Verify that the booking belongs to the authenticated user
+            if (booking.user_id !== req.user.id) {
+                return res.status(403).json({
+                    success: false,
+                    message: 'You are not authorized to modify this booking'
+                });
+            }
+
+            // Check if place still exists and is active (for accept action)
+            if (action === 'accept' && booking.place) {
+                if (!booking.place.is_active) {
+                    return res.status(400).json({
+                        success: false,
+                        message: 'This place is currently not available for booking'
+                    });
+                }
+            }
+
+            // Handle ACCEPT action
+            if (action === 'accept') {
+                // Check current booking status
+                if (booking.booking_status === 'confirmed') {
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Booking is already confirmed'
+                    });
+                }
+
+                if (booking.booking_status === 'cancelled') {
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Cannot accept a cancelled booking'
+                    });
+                }
+
+                if (booking.booking_status === 'completed') {
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Cannot accept a completed booking'
+                    });
+                }
+
+                // Validate booking date is not in the past
+                const bookingDateObj = new Date(booking.booking_date);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                if (bookingDateObj < today) {
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Cannot accept a booking with a past date'
+                    });
+                }
+
+                // Confirm the booking
+                await booking.confirm();
+
+                // Fetch updated booking with all details
+                const updatedBooking = await PlaceBooking.findByPk(booking.id, {
+                    include: [
+                        {
+                            model: Place,
+                            as: 'place',
+                            include: [
+                                {
+                                    model: PlaceCategory,
+                                    as: 'category',
+                                    attributes: ['id', 'name', 'icon', 'color']
+                                },
+                                {
+                                    model: PlaceImage,
+                                    as: 'images',
+                                    attributes: ['id', 'image_path'],
+                                    where: { is_primary: true },
+                                    required: false,
+                                    limit: 1
+                                }
+                            ]
+                        },
+                        {
+                            model: User,
+                            as: 'user',
+                            attributes: ['id', 'name', 'email']
+                        }
+                    ]
+                });
+
+                return res.status(200).json({
+                    success: true,
+                    message: 'Booking confirmed successfully',
+                    data: updatedBooking
+                });
+            }
+
+            // Handle CANCEL action
+            if (action === 'cancel') {
+                // Check current booking status
+                if (booking.booking_status === 'cancelled') {
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Booking is already cancelled'
+                    });
+                }
+
+                if (booking.booking_status === 'completed') {
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Cannot cancel a completed booking'
+                    });
+                }
+
+                // Cancel the booking
+                await booking.cancel(cancellation_reason);
+
+                // Fetch updated booking with all details
+                const updatedBooking = await PlaceBooking.findByPk(booking.id, {
+                    include: [
+                        {
+                            model: Place,
+                            as: 'place',
+                            include: [
+                                {
+                                    model: PlaceCategory,
+                                    as: 'category',
+                                    attributes: ['id', 'name', 'icon', 'color']
+                                },
+                                {
+                                    model: PlaceImage,
+                                    as: 'images',
+                                    attributes: ['id', 'image_path'],
+                                    where: { is_primary: true },
+                                    required: false,
+                                    limit: 1
+                                }
+                            ]
+                        },
+                        {
+                            model: User,
+                            as: 'user',
+                            attributes: ['id', 'name', 'email']
+                        }
+                    ]
+                });
+
+                return res.status(200).json({
+                    success: true,
+                    message: 'Booking cancelled successfully',
+                    data: updatedBooking
+                });
+            }
+
+        } catch (error) {
+            console.error('Error updating booking status:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Error updating booking status',
+                error: error.message
+            });
+        }
+    },
+
 };
 
 module.exports = placeBookingController;

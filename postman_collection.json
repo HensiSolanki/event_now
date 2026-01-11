@@ -1552,6 +1552,66 @@
           "response": []
         },
         {
+          "name": "Accept/Confirm Booking",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"action\": \"accept\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/bookings/{{booking_id}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "bookings", "{{booking_id}}", "status"]
+            },
+            "description": "Accept (confirm) a pending booking. Validates that booking exists, user owns it, place is active, booking is pending, and date is not in the past."
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Booking via Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text",
+                "description": "Required - User authentication token"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"action\": \"cancel\",\n    \"cancellation_reason\": \"Customer requested cancellation due to schedule conflict\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/bookings/{{booking_id}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "bookings", "{{booking_id}}", "status"]
+            },
+            "description": "Cancel a booking with comprehensive validation. Checks that booking exists, user owns it, booking is not already cancelled or completed. Records cancellation timestamp and reason."
+          },
+          "response": []
+        },
+        {
           "name": "Filter Bookings by Status - Confirmed",
           "request": {
             "method": "GET",

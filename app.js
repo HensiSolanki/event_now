@@ -39,7 +39,7 @@ sequelize.authenticate()
         // Automatically updates activity statuses based on time
         // - Changes 'upcoming' to 'live' when start_date is reached
         // - Changes 'live' to 'completed' when end_date is reached
-        activityScheduler.start();
+        // activityScheduler.start(); // DISABLED
     })
     .catch((err) => {
         console.error("Unable to connect to the database:", err);

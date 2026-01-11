@@ -208,6 +208,11 @@ router.put('/bookings/:id', protect, placeBookingController.updateBooking);
 // @access  Private (requires authentication)
 router.patch('/bookings/:id/cancel', protect, placeBookingController.cancelBooking);
 
+// @route   PATCH /api/auth/bookings/:id/status
+// @desc    Accept or cancel booking with validation
+// @access  Private (requires authentication)
+router.patch('/bookings/:id/status', protect, placeBookingController.updateBookingStatus);
+
 /**
  * Place Offer Routes
  * Base URL: /api/auth/places/:placeId/offers and /api/auth/offers

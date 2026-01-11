@@ -110,11 +110,12 @@ const placeController = {
                     raw: true
                 });
                 
-                const favoritePlaceIds = new Set(userFavorites.map(fav => fav.place_id));
+                // Convert to numbers to ensure type consistency
+                const favoritePlaceIds = new Set(userFavorites.map(fav => Number(fav.place_id)));
                 
                 placesWithFavorite = places.map(place => {
                     const placeData = place.toJSON();
-                    placeData.isFavorite = favoritePlaceIds.has(place.id);
+                    placeData.isFavorite = favoritePlaceIds.has(Number(place.id));
                     return placeData;
                 });
             } else {
