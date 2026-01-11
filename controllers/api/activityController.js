@@ -158,6 +158,9 @@ const activityController = {
      */
     getAllActivities: async (req, res) => {
         try {
+            // Set explicit JSON content type header
+            res.setHeader('Content-Type', 'application/json');
+
             const {
                 status,
                 place_id,
@@ -244,6 +247,7 @@ const activityController = {
             });
         } catch (error) {
             console.error('Error fetching activities:', error);
+            res.setHeader('Content-Type', 'application/json');
             res.status(500).json({
                 success: false,
                 message: 'Error fetching activities',

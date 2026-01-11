@@ -110,12 +110,21 @@ const placeController = {
                     raw: true
                 });
                 
+                // Debug logging
+                console.log('User ID:', req.user.id);
+                console.log('User Favorites:', userFavorites);
+                console.log('Sample Place ID:', places.length > 0 ? places[0].id : 'No places');
+                console.log('Place ID Type:', places.length > 0 ? typeof places[0].id : 'N/A');
+                
                 // Convert to numbers to ensure type consistency
                 const favoritePlaceIds = new Set(userFavorites.map(fav => Number(fav.place_id)));
+                console.log('Favorite Place IDs Set:', Array.from(favoritePlaceIds));
                 
                 placesWithFavorite = places.map(place => {
                     const placeData = place.toJSON();
-                    placeData.isFavorite = favoritePlaceIds.has(Number(place.id));
+                    const isFav = favoritePlaceIds.has(Number(place.id));
+                    console.log(`Place ID ${place.id} (${typeof place.id}) - isFavorite: ${isFav}`);
+                    placeData.isFavorite = isFav;
                     return placeData;
                 });
             } else {

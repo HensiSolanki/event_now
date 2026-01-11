@@ -11,6 +11,15 @@ const { protect, optionalAuth } = require('../middleware/authMiddleware');
 const { categoryUpload, placeUpload, activityUpload } = require('../middleware/upload');
 
 /**
+ * Middleware to ensure all API responses are JSON
+ * This prevents issues where responses might be interpreted as HTML or other formats
+ */
+router.use((req, res, next) => {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    next();
+});
+
+/**
  * Authentication Routes
  */
 
@@ -258,16 +267,6 @@ router.get('/offers/validate/:code', placeOfferController.validateOfferCode);
  * Base URL: /api/auth/activities
  */
 
-// @route   POST /api/auth/activities
-// @desc    Create a new activity (with optional image upload)
-// @access  Private (requires authentication)
-router.post('/activities', protect, activityUpload.single('image'), activityController.createActivity);
-
-// @route   GET /api/auth/activities
-// @desc    Get all activities (with filters and pagination)
-// @access  Public
-router.get('/activities', activityController.getAllActivities);
-
 // @route   GET /api/auth/activities/upcoming
 // @desc    Get upcoming activities
 // @access  Public
@@ -277,6 +276,16 @@ router.get('/activities/upcoming', activityController.getUpcomingActivities);
 // @desc    Get live activities
 // @access  Public
 router.get('/activities/live', activityController.getLiveActivities);
+
+// @route   POST /api/auth/activities
+// @desc    Create a new activity (with optional image upload)
+// @access  Private (requires authentication)
+router.post('/activities', protect, activityUpload.single('image'), activityController.createActivity);
+
+// @route   GET /api/auth/activities
+// @desc    Get all activities (with filters and pagination)
+// @access  Public
+router.get('/activities', activityController.getAllActivities);
 
 // @route   GET /api/auth/activities/:id
 // @desc    Get activity by ID

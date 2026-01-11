@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light" data-layout="fixed-sidebar-header">
+  
+  <head>
+    <%- include ('../partials/title-meta') %>
+      <%- HeaderCss %>
+        <%- include ('../partials/head-css.ejs') %>
+
+  </head>
+
+  <body>
+  <div class="page-container">
+    <%- include ('../partials/sidebar') %>
+    <%- include ('../partials/navbar') %>
+      <!-- Page Content -->
+      <div class="page-content">
+        <!-- Page Inner -->
+        <div class="page-inner">
+          <div class="container-fluid" id="main-wrapper">
+            <%- body%>
+          </div>
+        </div>
+        <!-- End Page-content -->
+        <%- include ('../partials/footer') %>
+          <%- include ('../partials/right-sidebar') %>
+      </div>
+</div>
+      <!-- end main content-->
+
+      <!-- END layout-wrapper -->
+      <%- include ('../partials/vendor-scripts') %>
+        <%- FooterJs %>
+          <!-- Custom Js -->
+          <script src="assets/js/custom.js"></script>
+  </body>
+
+  </html>
