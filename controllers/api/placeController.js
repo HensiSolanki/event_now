@@ -1030,6 +1030,7 @@ const placeController = {
                         ]
                     }
                 ],
+                distinct: true,
                 order: [['created_at', 'DESC']],
                 limit: parseInt(limit),
                 offset: offset
