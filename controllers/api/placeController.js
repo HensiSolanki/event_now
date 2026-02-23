@@ -27,6 +27,7 @@ const placeController = {
                 featured_only, 
                 search,
                 pricing,
+                location, // exact location filter (from /places/locations API)
                 sort_by = 'created_at',
                 sort_order = 'DESC',
                 page = 1,
@@ -51,6 +52,11 @@ const placeController = {
             
             if (pricing) {
                 where.pricing = pricing;
+            }
+
+            // Exact location filter (string returned by /places/locations)
+            if (location) {
+                where.location = location;
             }
             
             if (search) {
@@ -148,6 +154,58 @@ const placeController = {
             res.status(500).json({
                 success: false,
                 message: 'Error fetching places',
+                error: error.message
+            });
+        }
+    },
+
+    /**
+     * Get list of place locations (grouped by location name)
+     * Each location appears once with its name and the places at that location.
+     * GET /api/places/locations
+     */
+    getPlaceLocations: async (req, res) => {
+        try {
+            const { active_only = 'true' } = req.query;
+            const where = {};
+            if (active_only === 'true') {
+                where.is_active = true;
+            }
+
+            const places = await Place.findAll({
+                where,
+                attributes: ['id', 'location', 'name'],
+                raw: true
+            });
+
+            // Group by location: same location name -> one entry with location name + place_count + place_ids/places
+            const locationMap = new Map();
+            for (const place of places) {
+                const loc = (place.location && place.location.trim()) || null;
+                if (!loc) continue;
+                if (!locationMap.has(loc)) {
+                    locationMap.set(loc, { location: loc, place_count: 0, place_ids: [], places: [] });
+                }
+                const entry = locationMap.get(loc);
+                entry.place_count += 1;
+                entry.place_ids.push(place.id);
+                entry.places.push({ id: place.id, name: place.name });
+            }
+
+            const data = Array.from(locationMap.values()).sort((a, b) =>
+                a.location.localeCompare(b.location)
+            );
+
+            res.status(200).json({
+                success: true,
+                count: data.length,
+                data
+            });
+        } catch (error) {
+            console.error('Error fetching place locations:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Error fetching place locations',
                 error: error.message
             });
         }

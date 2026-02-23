@@ -92,6 +92,11 @@ router.delete('/place-categories/:id', placeCategoryController.deleteCategory);
 // @access  Public (includes isFavorite flag if authenticated)
 router.get('/places', optionalAuth, placeController.getAllPlaces);
 
+// @route   GET /api/auth/places/locations
+// @desc    Get list of unique place locations (grouped); each location with place count and place ids
+// @access  Public
+router.get('/places/locations', placeController.getPlaceLocations);
+
 // @route   GET /api/auth/places/:id
 // @desc    Get place by ID with details
 // @access  Public (includes isFavorite flag if authenticated)
